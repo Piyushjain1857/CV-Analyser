@@ -53,7 +53,7 @@
 .auth-brand-name {
   font-size: 1.15rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .auth-card-container {
@@ -87,7 +87,7 @@
   font-size: 1.65rem;
   font-weight: 800;
   letter-spacing: -0.025em;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 12px 0 6px 0;
 }
 
@@ -102,10 +102,10 @@
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: var(--accent-rose-bg);
+  border: 1px solid var(--accent-rose-border);
   border-radius: var(--radius-md);
-  color: #fca5a5;
+  color: var(--accent-rose);
   font-size: 0.8125rem;
   margin-bottom: 18px;
 }
@@ -115,8 +115,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: var(--primary-light);
+  border: 1px solid var(--border-purple);
   border-radius: var(--radius-md);
   margin-bottom: 22px;
 }
@@ -130,7 +130,7 @@
 .demo-label {
   font-size: 0.675rem;
   font-weight: 700;
-  color: #c4b5fd;
+  color: var(--text-accent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -138,7 +138,7 @@
 .demo-val {
   font-size: 0.775rem;
   font-family: var(--font-mono);
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .demo-fill-btn {
@@ -256,6 +256,6 @@
 }
 
 .auth-switch-link:hover {
-  color: #c4b5fd;
+  color: var(--primary-hover);
   text-decoration: underline;
 }

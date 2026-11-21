@@ -7,31 +7,77 @@ const AppContext = createContext(null);
 export function AppProvider({ children }) {
   const { user, isAuthenticated } = useAuth();
 
-  // Theme Management (Dark / Light)
+  // Theme Management (Dark / Light / System)
+  const [themePreference, setThemePreference] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cv_insight_theme_pref');
+      if (saved === 'light' || saved === 'dark' || saved === 'system') return saved;
+      const legacySaved = localStorage.getItem('cv_insight_theme');
+      if (legacySaved === 'light' || legacySaved === 'dark') return legacySaved;
+    } catch {
+      // Ignore
+    }
+    return 'system';
+  });
+
+  const getSystemTheme = useCallback(() => {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    return 'dark';
+  }, []);
+
   const [theme, setTheme] = useState(() => {
     try {
-      const saved = localStorage.getItem('cv_insight_theme');
-      if (saved === 'light' || saved === 'dark') return saved;
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      const savedPref = localStorage.getItem('cv_insight_theme_pref');
+      if (savedPref === 'light' || savedPref === 'dark') return savedPref;
+      const legacySaved = localStorage.getItem('cv_insight_theme');
+      if (legacySaved === 'light' || legacySaved === 'dark') return legacySaved;
+      if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
         return 'light';
       }
     } catch {
-      // Ignore localStorage errors
+      // Ignore
     }
     return 'dark';
   });
 
+  // Keep theme synced with themePreference & system preference
   useEffect(() => {
-    try {
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('cv_insight_theme', theme);
-    } catch {
-      // Ignore localStorage errors
+    const applyTheme = (computedTheme) => {
+      setTheme(computedTheme);
+      document.documentElement.setAttribute('data-theme', computedTheme);
+      try {
+        localStorage.setItem('cv_insight_theme', computedTheme);
+        localStorage.setItem('cv_insight_theme_pref', themePreference);
+      } catch {
+        // Ignore
+      }
+    };
+
+    if (themePreference === 'system') {
+      applyTheme(getSystemTheme());
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+      const handleChange = (e) => {
+        applyTheme(e.matches ? 'light' : 'dark');
+      };
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+      } else if (mediaQuery.addListener) {
+        mediaQuery.addListener(handleChange);
+        return () => mediaQuery.removeListener(handleChange);
+      }
+    } else {
+      applyTheme(themePreference);
     }
-  }, [theme]);
+  }, [themePreference, getSystemTheme]);
 
   const toggleTheme = useCallback(() => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setThemePreference((prev) => {
+      const next = (prev === 'dark' ? 'light' : 'dark');
+      return next;
+    });
   }, []);
 
   // Sidebar Collapse state
@@ -205,6 +251,8 @@ export function AppProvider({ children }) {
   const value = {
     theme,
     setTheme,
+    themePreference,
+    setThemePreference,
     toggleTheme,
     isSidebarCollapsed,
     setIsSidebarCollapsed,

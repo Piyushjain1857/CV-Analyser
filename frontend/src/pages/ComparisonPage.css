@@ -227,9 +227,9 @@
 .gap-tag-pill {
   font-size: 0.725rem;
   padding: 3px 8px;
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  color: #fcd34d;
+  background: var(--accent-amber-bg);
+  border: 1px solid var(--accent-amber-border);
+  color: var(--accent-amber);
   border-radius: var(--radius-sm);
 }
 
@@ -249,10 +249,10 @@
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: var(--accent-emerald-bg);
+  border: 1px solid var(--accent-emerald-border);
   border-radius: var(--radius-full);
-  color: #6ee7b7;
+  color: var(--accent-emerald);
   font-size: 0.8125rem;
   font-weight: 600;
 }

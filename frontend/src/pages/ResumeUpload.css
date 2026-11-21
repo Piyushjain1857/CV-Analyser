@@ -36,10 +36,10 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(139, 92, 246, 0.12);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: var(--primary-light);
+  border: 1px solid var(--border-purple);
   border-radius: var(--radius-full);
-  color: #c4b5fd;
+  color: var(--text-accent);
   font-size: 0.775rem;
   font-weight: 600;
   cursor: pointer;
@@ -47,8 +47,8 @@
 }
 
 .rubric-explainer-btn:hover {
-  background: rgba(139, 92, 246, 0.22);
-  color: #ffffff;
+  background: var(--primary-light);
+  color: var(--primary);
   border-color: var(--primary);
 }
 
@@ -96,17 +96,17 @@
 }
 
 .rubric-callout-text strong {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .rubric-weights-summary {
   font-size: 0.75rem;
-  color: #c4b5fd;
+  color: var(--text-accent);
   font-weight: 500;
 }
 
 .rubric-weights-summary strong {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 /* Upload Error Alert */
@@ -115,10 +115,10 @@
   align-items: flex-start;
   gap: 12px;
   padding: 14px 18px;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: var(--accent-rose-bg);
+  border: 1px solid var(--accent-rose-border);
   border-radius: var(--radius-md);
-  color: #fca5a5;
+  color: var(--accent-rose);
 }
 
 .upload-error-alert .error-icon {
@@ -135,17 +135,17 @@
   font-size: 0.875rem;
   font-weight: 700;
   margin-bottom: 2px;
-  color: #ffffff;
+  color: var(--accent-rose);
 }
 
 .upload-error-alert .error-message {
   font-size: 0.8125rem;
   line-height: 1.4;
-  color: #fca5a5;
+  color: var(--text-primary);
 }
 
 .upload-error-alert .error-dismiss-btn {
-  color: #fca5a5;
+  color: var(--accent-rose);
   padding: 4px;
   border-radius: 4px;
 }
@@ -169,7 +169,7 @@
   justify-content: space-between;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .progress-status-percentage {
@@ -180,7 +180,7 @@
 .progress-bar-track {
   width: 100%;
   height: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--border-subtle);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -190,7 +190,7 @@
   background: var(--gradient-primary);
   border-radius: var(--radius-full);
   transition: width 0.4s ease;
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 10px var(--primary-glow);
 }
 
 .progress-step-indicator {
@@ -204,7 +204,7 @@
 .progress-step-text {
   font-family: var(--font-mono);
   font-size: 0.775rem;
-  color: #c4b5fd;
+  color: var(--text-accent);
 }
 
 /* Form Layout */
@@ -329,7 +329,7 @@
 .file-name {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin-bottom: 2px;
 }
 
@@ -344,7 +344,7 @@
   gap: 6px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #6ee7b7;
+  color: var(--accent-emerald);
   margin-top: 6px;
 }
 
@@ -517,7 +517,7 @@
 .rubric-modal-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .rubric-modal-close {
@@ -528,8 +528,8 @@
 }
 
 .rubric-modal-close:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
 }
 
 .rubric-modal-body {
@@ -546,16 +546,16 @@
   align-items: flex-start;
   gap: 12px;
   padding: 12px 14px;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--accent-emerald-bg);
+  border: 1px solid var(--accent-emerald-border);
   border-radius: var(--radius-md);
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: #6ee7b7;
+  color: var(--accent-emerald);
 }
 
 .rubric-disclaimer-callout p strong {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .rubric-breakdown-list {
@@ -566,7 +566,7 @@
 
 .rubric-dim-item {
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   display: flex;
@@ -583,7 +583,7 @@
 }
 
 .dim-name {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .dim-weight {

@@ -13,7 +13,7 @@
 
 .score-gauge-track {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.08);
+  stroke: var(--border-subtle);
 }
 
 .score-gauge-fill {

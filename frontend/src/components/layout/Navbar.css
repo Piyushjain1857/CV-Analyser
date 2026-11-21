@@ -189,7 +189,7 @@
 }
 
 .nav-logout-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
+  background: var(--accent-rose-bg);
   color: var(--accent-rose);
 }
 

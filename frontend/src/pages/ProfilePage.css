@@ -113,13 +113,101 @@
 .toggle-title {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .toggle-desc {
   font-size: 0.8rem;
   line-height: 1.45;
   color: var(--text-secondary);
+}
+
+/* Theme Selector Grid */
+.theme-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.theme-option-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.theme-option-box:hover {
+  border-color: var(--primary);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.theme-option-box.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.theme-option-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+}
+
+.theme-option-icon.dark {
+  background: #1e293b;
+  color: #a78bfa;
+}
+
+.theme-option-icon.light {
+  background: #f1f5f9;
+  color: #6d28d9;
+}
+
+.theme-option-icon.system {
+  background: var(--bg-card);
+  color: var(--primary);
+}
+
+.theme-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.theme-option-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.theme-option-desc {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.theme-active-dot {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
 }
 
 .privacy-actions-row {
@@ -134,7 +222,7 @@
 /* Danger Zone Card */
 .danger-zone-card {
   padding: 24px;
-  border-color: rgba(239, 68, 68, 0.35) !important;
+  border-color: var(--accent-rose-border) !important;
   background: var(--bg-card);
 }
 
@@ -155,7 +243,7 @@
 .danger-action-title {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .danger-action-desc {
@@ -166,7 +254,7 @@
 
 .danger-divider {
   height: 1px;
-  background: rgba(239, 68, 68, 0.2);
+  background: var(--accent-rose-border);
   margin: 16px 0;
 }
 
@@ -174,9 +262,9 @@
 .danger-modal-warning {
   font-size: 0.85rem;
   line-height: 1.5;
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: var(--accent-rose);
+  background: var(--accent-rose-bg);
+  border: 1px solid var(--accent-rose-border);
   border-radius: var(--radius-sm);
   padding: 12px;
 }

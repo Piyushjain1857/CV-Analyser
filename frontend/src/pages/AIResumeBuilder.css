@@ -233,7 +233,7 @@
 }
 
 .color-swatch-dot.active {
-  border-color: #ffffff;
+  border-color: var(--text-primary);
   box-shadow: 0 0 0 2px var(--primary);
 }
 

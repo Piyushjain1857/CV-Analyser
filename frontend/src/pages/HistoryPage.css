@@ -48,11 +48,11 @@
   align-items: center;
   gap: 10px;
   font-size: 0.875rem;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .comp-selection-info strong {
-  color: #c4b5fd;
+  color: var(--text-accent);
 }
 
 .comp-selection-actions {
@@ -75,8 +75,8 @@
 }
 
 .comp-clear-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
 }
 
 /* Controls Bar */
@@ -126,7 +126,7 @@
 }
 
 .clear-search-btn:hover {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .history-filter-sort-group {
@@ -156,14 +156,14 @@
 }
 
 .filter-pill:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card-hover);
   color: var(--text-primary);
 }
 
 .filter-pill.active {
-  background: rgba(139, 92, 246, 0.15);
+  background: var(--primary-light);
   border-color: var(--primary);
-  color: #c4b5fd;
+  color: var(--text-accent);
 }
 
 .history-sort-box {
@@ -290,13 +290,13 @@
 }
 
 .compare-select-label:hover {
-  color: #ffffff;
+  color: var(--text-primary);
   border-color: var(--primary);
 }
 
 .compare-select-label.active {
-  color: #c4b5fd;
-  background: rgba(139, 92, 246, 0.15);
+  color: var(--text-accent);
+  background: var(--primary-light);
   border-color: var(--primary);
 }
 
@@ -308,7 +308,7 @@
 .resume-card-title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin-bottom: 8px;
   white-space: nowrap;
   overflow: hidden;
@@ -332,15 +332,15 @@
 }
 
 .mini-score-pill.ats {
-  background: rgba(16, 185, 129, 0.12);
-  color: #6ee7b7;
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: var(--accent-emerald-bg);
+  color: var(--accent-emerald);
+  border: 1px solid var(--accent-emerald-border);
 }
 
 .mini-score-pill.job {
-  background: rgba(139, 92, 246, 0.12);
-  color: #c4b5fd;
-  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: var(--primary-light);
+  color: var(--text-accent);
+  border: 1px solid var(--border-purple);
 }
 
 .resume-card-meta-list {
@@ -390,9 +390,9 @@
   font-size: 0.7rem;
   padding: 2px 7px;
   border-radius: 4px;
-  background: rgba(245, 158, 11, 0.12);
-  color: #fcd34d;
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  background: var(--accent-amber-bg);
+  color: var(--accent-amber);
+  border: 1px solid var(--accent-amber-border);
 }
 
 .history-card-footer {
@@ -417,17 +417,17 @@
   width: 32px;
   height: 32px;
   border-radius: var(--radius-sm);
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.25);
-  color: #c4b5fd;
+  background: var(--primary-light);
+  border: 1px solid var(--border-purple);
+  color: var(--text-accent);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .quick-pdf-btn:hover {
-  background: rgba(139, 92, 246, 0.25);
+  background: var(--primary-light);
   border-color: var(--primary);
-  color: #ffffff;
+  color: var(--primary);
 }
 
 .delete-record-btn {

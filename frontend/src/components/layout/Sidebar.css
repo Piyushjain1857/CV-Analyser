@@ -1,3 +1,8 @@
+/* ==========================================================================
+   CV Insight AI — Sidebar Component Styles
+   Supports Desktop Sticky, Collapsible, and Mobile Off-Canvas Drawer
+   ========================================================================== */
+
 .sidebar-root {
   width: 250px;
   background: var(--bg-secondary);
@@ -17,7 +22,7 @@
 }
 
 .sidebar-header {
-  padding: 18px 16px;
+  padding: 16px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,7 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #ffffff;
   box-shadow: 0 0 14px var(--primary-glow);
   flex-shrink: 0;
 }
@@ -60,7 +65,7 @@
 
 .brand-badge {
   font-size: 0.625rem;
-  color: var(--primary);
+  color: var(--text-accent);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -91,25 +96,27 @@
 }
 
 .sidebar-nav-section-title {
-  padding: 6px 10px;
-  font-size: 0.65rem;
+  padding: 8px 12px 4px 12px;
+  font-size: 0.675rem;
   font-weight: 700;
-  color: var(--text-dim);
+  color: var(--text-muted);
   letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 9px 12px;
+  gap: 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-md);
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
   transition: all var(--transition-fast);
   position: relative;
   text-decoration: none;
+  border: 1px solid transparent;
 }
 
 .sidebar-root.collapsed .sidebar-nav-item {
@@ -124,15 +131,14 @@
 
 .sidebar-nav-item.active {
   background: var(--primary-light);
-  color: var(--primary);
+  color: var(--text-accent);
   font-weight: 600;
-  border: 1px solid var(--border-purple);
-  box-shadow: 0 0 12px rgba(139, 92, 246, 0.12);
+  border-color: var(--border-purple);
+  box-shadow: 0 0 12px var(--primary-light);
 }
 
 .sidebar-nav-item.active .sidebar-nav-icon {
-  color: var(--primary);
-  filter: drop-shadow(0 0 6px var(--primary-glow));
+  color: var(--text-accent);
 }
 
 .sidebar-nav-label {
@@ -143,17 +149,17 @@
 .sidebar-new-pill {
   font-size: 0.625rem;
   font-weight: 700;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: var(--radius-full);
-  background: var(--gradient-primary);
+  background: var(--primary);
   color: #ffffff;
   letter-spacing: 0.02em;
 }
 
-/* Pro Widget */
+/* Pro / Telemetry Widget */
 .sidebar-pro-widget {
   margin: 10px 10px 14px 10px;
-  padding: 12px 14px;
+  padding: 14px;
   background: var(--bg-card);
   border: 1px solid var(--border-purple);
   border-radius: var(--radius-md);
@@ -167,19 +173,19 @@
 }
 
 .widget-icon {
-  color: var(--primary);
+  color: var(--text-accent);
 }
 
 .widget-title {
-  font-size: 0.775rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .widget-desc {
-  font-size: 0.7rem;
+  font-size: 0.725rem;
   color: var(--text-muted);
-  line-height: 1.35;
+  line-height: 1.4;
   margin-bottom: 8px;
 }
 
@@ -201,7 +207,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.6875rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
 }
 
@@ -210,7 +216,7 @@
   font-weight: 700;
 }
 
-/* Footer / User */
+/* Footer / User Card */
 .sidebar-footer {
   padding: 12px 10px;
   border-top: 1px solid var(--border-subtle);
@@ -234,7 +240,7 @@
 }
 
 .sidebar-logout-icon-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
+  background: var(--accent-rose-bg);
   color: var(--accent-rose);
 }
 
@@ -247,6 +253,7 @@
   transition: background var(--transition-fast);
   text-decoration: none;
   overflow: hidden;
+  flex: 1;
 }
 
 .sidebar-user-card:hover {
@@ -262,7 +269,7 @@
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
   font-size: 0.85rem;
   flex-shrink: 0;
 }
@@ -290,7 +297,7 @@
   overflow: hidden;
 }
 
-/* Mobile responsive */
+/* Mobile responsive drawer */
 @media (max-width: 768px) {
   .sidebar-root {
     position: fixed;

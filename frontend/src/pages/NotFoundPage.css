@@ -25,7 +25,8 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(239, 68, 68, 0.15);
+  background: var(--accent-rose-bg);
+  border: 1px solid var(--accent-rose-border);
   color: var(--accent-rose);
   display: flex;
   align-items: center;
@@ -46,7 +47,7 @@
   font-size: 1.75rem;
   font-weight: 800;
   margin-bottom: 12px;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .notfound-desc {

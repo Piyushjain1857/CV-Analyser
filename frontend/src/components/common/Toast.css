@@ -26,17 +26,17 @@
 
 .toast-success {
   color: var(--accent-emerald);
-  border-color: rgba(16, 185, 129, 0.3);
+  border-color: var(--accent-emerald-border);
 }
 
 .toast-error {
   color: var(--accent-rose);
-  border-color: rgba(239, 68, 68, 0.3);
+  border-color: var(--accent-rose-border);
 }
 
 .toast-info {
-  color: var(--primary);
-  border-color: rgba(139, 92, 246, 0.3);
+  color: var(--text-accent);
+  border-color: var(--border-purple);
 }
 
 .toast-content {

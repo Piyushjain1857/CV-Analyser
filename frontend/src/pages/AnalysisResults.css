@@ -48,7 +48,7 @@
 }
 
 .results-page-sub strong {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .results-actions {
@@ -88,7 +88,7 @@
 }
 
 .disclaimer-text strong {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .rubric-weights-row {
@@ -187,8 +187,8 @@
 }
 
 .tab-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
 }
 
 .tab-btn.active {
@@ -464,7 +464,7 @@
 .edu-degree {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .edu-status {
@@ -504,7 +504,7 @@
 .check-title {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .check-sub {
@@ -555,7 +555,7 @@
 .g-stat-value {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .action-verbs-section {
@@ -748,7 +748,7 @@
 }
 
 .re-match-trigger-link:hover {
-  color: #ffffff;
+  color: var(--primary-hover);
   text-decoration: underline;
 }
 
@@ -808,11 +808,11 @@
 }
 
 .rewrite-label.original {
-  color: #fca5a5;
+  color: var(--accent-rose);
 }
 
 .rewrite-label.improved {
-  color: #6ee7b7;
+  color: var(--accent-emerald);
 }
 
 .rewrite-text {
@@ -826,7 +826,7 @@
 }
 
 .rewrite-text.improved {
-  color: #ffffff;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -893,15 +893,15 @@
 }
 
 .copy-rewrite-btn:hover {
-  background: rgba(139, 92, 246, 0.25);
+  background: var(--primary-light);
   border-color: var(--primary);
-  color: #ffffff;
+  color: var(--primary);
 }
 
 .copy-rewrite-btn.copied {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: rgba(16, 185, 129, 0.5);
-  color: #6ee7b7;
+  background: var(--accent-emerald-bg);
+  border-color: var(--accent-emerald-border);
+  color: var(--accent-emerald);
 }
 
 /* TAB 3: Recommended Learning Topics */
@@ -947,7 +947,7 @@
 .topic-name {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   line-height: 1.35;
 }
 
@@ -1006,7 +1006,7 @@
 .rubric-modal-title {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .rubric-modal-close {
@@ -1020,8 +1020,8 @@
 }
 
 .rubric-modal-close:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
 }
 
 .rubric-modal-body {
@@ -1040,7 +1040,7 @@
 }
 
 .rematch-instruction strong {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .form-group {
@@ -1202,7 +1202,7 @@
 .studio-section-heading {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 6px 0;
 }
 
@@ -1278,21 +1278,21 @@
 }
 
 .status-badge.accepted {
-  color: #6ee7b7;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--accent-emerald);
+  background: var(--accent-emerald-bg);
+  border: 1px solid var(--accent-emerald-border);
 }
 
 .status-badge.rejected {
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--accent-rose);
+  background: var(--accent-rose-bg);
+  border: 1px solid var(--accent-rose-border);
 }
 
 .status-badge.edited {
-  color: #c4b5fd;
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--text-accent);
+  background: var(--primary-light);
+  border: 1px solid var(--border-purple);
 }
 
 .status-badge.pending {
@@ -1317,7 +1317,7 @@
   background: var(--bg-card);
   border: 1px solid var(--primary);
   border-radius: var(--radius-sm);
-  color: #ffffff;
+  color: var(--text-primary);
   padding: 10px 12px;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -1363,8 +1363,8 @@
 }
 
 .decision-btn.accept {
-  color: #6ee7b7;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--accent-emerald);
+  border: 1px solid var(--accent-emerald-border);
 }
 
 .decision-btn.accept:hover,
@@ -1374,8 +1374,8 @@
 }
 
 .decision-btn.reject {
-  color: #fca5a5;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: var(--accent-rose);
+  border: 1px solid var(--accent-rose-border);
 }
 
 .decision-btn.reject:hover,
@@ -1385,8 +1385,8 @@
 }
 
 .decision-btn.edit {
-  color: #c4b5fd;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--text-accent);
+  border: 1px solid var(--border-purple);
 }
 
 .decision-btn.edit:hover,
@@ -1446,7 +1446,7 @@
 .variant-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -1517,7 +1517,7 @@
 .project-name {
   font-size: 1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -1567,12 +1567,12 @@
   font-size: 0.725rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #fca5a5;
+  color: var(--accent-rose);
   letter-spacing: 0.05em;
 }
 
 .proj-label.improved {
-  color: #6ee7b7;
+  color: var(--accent-emerald);
 }
 
 .proj-text {
@@ -1584,7 +1584,7 @@
 }
 
 .proj-text.improved {
-  color: #ffffff;
+  color: var(--text-primary);
   font-style: normal;
   font-weight: 500;
 }
@@ -1616,8 +1616,8 @@
 }
 
 .copy-pill-btn:hover {
-  background: rgba(139, 92, 246, 0.3);
-  color: #ffffff;
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 /* Categorized Verbs Bank */
@@ -1718,7 +1718,7 @@
 .overview-title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -1769,7 +1769,7 @@
 .roadmap-main-title {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 6px 0;
 }
 
@@ -1831,7 +1831,7 @@
 .tier-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 4px 0 0 0;
 }
 
@@ -1869,7 +1869,7 @@
 .milestone-skill {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .milestone-status-badge {
@@ -1951,7 +1951,7 @@
   font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.45;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -1998,7 +1998,7 @@
   font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.5;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -2132,7 +2132,7 @@
 .rubric-item-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .rubric-item-weight {
@@ -2292,7 +2292,7 @@
 }
 
 .wq-row strong {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .wq-tone {
@@ -2355,7 +2355,7 @@
 .trio-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -2385,12 +2385,12 @@
 .trio-req-name {
   font-size: 0.835rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .trio-evidence-cite {
   font-size: 0.75rem;
-  color: #6ee7b7;
+  color: var(--accent-emerald);
   line-height: 1.4;
 }
 
@@ -2403,7 +2403,7 @@
 
 .trio-recommendation {
   font-size: 0.725rem;
-  color: #c4b5fd;
+  color: var(--text-accent);
   line-height: 1.4;
 }
 

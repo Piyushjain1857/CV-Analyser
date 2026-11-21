@@ -1,3 +1,8 @@
+/* ==========================================================================
+   CV Insight AI — Health Badge Component Styles
+   Supports real-time telemetry badge in Dark & Light Themes
+   ========================================================================== */
+
 .health-badge-container {
   display: inline-flex;
   flex-direction: column;
@@ -8,11 +13,11 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 5px 11px;
-  background: rgba(18, 26, 48, 0.85);
+  padding: 5px 12px;
+  background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-full);
-  font-size: 0.75rem;
+  font-size: var(--font-xs);
   font-weight: 600;
   color: var(--text-secondary);
   transition: all var(--transition-fast);
@@ -20,15 +25,15 @@
 }
 
 .health-badge-container.status-ok .health-badge-pill {
-  border-color: rgba(16, 185, 129, 0.35);
-  color: #6ee7b7;
-  background: rgba(16, 185, 129, 0.08);
+  border-color: var(--accent-emerald-border);
+  color: var(--accent-emerald);
+  background: var(--accent-emerald-bg);
 }
 
 .health-badge-container.status-warn .health-badge-pill {
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.08);
+  border-color: var(--accent-rose-border);
+  color: var(--accent-rose);
+  background: var(--accent-rose-bg);
 }
 
 .health-pulse-dot {
@@ -53,8 +58,9 @@
 }
 
 .health-latency {
-  padding: 1px 5px;
-  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 4px;
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -83,7 +89,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 0.725rem;
+  font-size: var(--font-xs);
   color: var(--text-muted);
 }
 

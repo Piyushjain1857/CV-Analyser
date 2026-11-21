@@ -21,6 +21,9 @@ import {
   FileText,
   Clock,
   Shield,
+  Sun,
+  Moon,
+  Monitor,
   Eye,
   EyeOff,
 } from 'lucide-react';
@@ -36,7 +39,7 @@ import './ProfilePage.css';
 export function ProfilePage() {
   const navigate = useNavigate();
   const { user, updateUser, logout } = useAuth();
-  const { addToast, health, checkHealth, fetchResumes } = useApp();
+  const { addToast, health, checkHealth, fetchResumes, themePreference, setThemePreference } = useApp();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -331,6 +334,71 @@ export function ProfilePage() {
                   </Button>
                 </div>
               </form>
+            </CardBody>
+          </Card>
+
+          {/* Card 1.5: Appearance & Interface Theme */}
+          <Card className="profile-card">
+            <CardHeader
+              title="Appearance & Interface Theme"
+              subtitle="Choose your preferred color theme with persistent browser storage and system sync"
+            />
+            <CardBody>
+              <div className="theme-selector-grid">
+                <button
+                  type="button"
+                  className={`theme-option-box ${themePreference === 'dark' ? 'active' : ''}`}
+                  onClick={() => {
+                    setThemePreference('dark');
+                    addToast('Theme updated', 'info', 'Dark theme enabled');
+                  }}
+                >
+                  <div className="theme-option-icon dark">
+                    <Moon size={22} />
+                  </div>
+                  <div className="theme-option-text">
+                    <span className="theme-option-title">Dark Theme</span>
+                    <span className="theme-option-desc">Deep navy (#0B1120) with violet accents</span>
+                  </div>
+                  {themePreference === 'dark' && <span className="theme-active-dot" />}
+                </button>
+
+                <button
+                  type="button"
+                  className={`theme-option-box ${themePreference === 'light' ? 'active' : ''}`}
+                  onClick={() => {
+                    setThemePreference('light');
+                    addToast('Theme updated', 'info', 'Light theme enabled');
+                  }}
+                >
+                  <div className="theme-option-icon light">
+                    <Sun size={22} />
+                  </div>
+                  <div className="theme-option-text">
+                    <span className="theme-option-title">Light Theme</span>
+                    <span className="theme-option-desc">Clean slate (#F8FAFC) with purple accents</span>
+                  </div>
+                  {themePreference === 'light' && <span className="theme-active-dot" />}
+                </button>
+
+                <button
+                  type="button"
+                  className={`theme-option-box ${themePreference === 'system' ? 'active' : ''}`}
+                  onClick={() => {
+                    setThemePreference('system');
+                    addToast('Theme updated', 'info', 'System theme enabled (syncs with OS)');
+                  }}
+                >
+                  <div className="theme-option-icon system">
+                    <Monitor size={22} />
+                  </div>
+                  <div className="theme-option-text">
+                    <span className="theme-option-title">System Sync</span>
+                    <span className="theme-option-desc">Automatically matches your OS preference</span>
+                  </div>
+                  {themePreference === 'system' && <span className="theme-active-dot" />}
+                </button>
+              </div>
             </CardBody>
           </Card>
 
