@@ -135,7 +135,7 @@
 .danger-zone-card {
   padding: 24px;
   border-color: rgba(239, 68, 68, 0.35) !important;
-  background: linear-gradient(145deg, rgba(239, 68, 68, 0.04) 0%, rgba(18, 26, 48, 0.9) 100%);
+  background: var(--bg-card);
 }
 
 .danger-action-row {

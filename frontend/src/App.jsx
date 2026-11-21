@@ -10,6 +10,10 @@ import AnalysisResults from './pages/AnalysisResults';
 import ComparisonPage from './pages/ComparisonPage';
 import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
+import AIResumeBuilder from './pages/AIResumeBuilder';
+import JobMatchPage from './pages/JobMatchPage';
+import AICareerAssistantPage from './pages/AICareerAssistantPage';
+import CareerRoadmapPage from './pages/CareerRoadmapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { ProtectedRoute, PublicOnlyRoute } from './components/common/ProtectedRoute';
 import './App.css';
@@ -43,6 +47,10 @@ export function App() {
         <Route element={<DashboardLayout />}>
           <Route index element={<DashboardHome />} />
           <Route path="upload" element={<ResumeUpload />} />
+          <Route path="builder" element={<AIResumeBuilder />} />
+          <Route path="job-match" element={<JobMatchPage />} />
+          <Route path="assistant" element={<AICareerAssistantPage />} />
+          <Route path="roadmap" element={<CareerRoadmapPage />} />
           <Route path="results" element={<AnalysisResults />} />
           <Route path="results/:id" element={<AnalysisResults />} />
           <Route path="compare" element={<ComparisonPage />} />

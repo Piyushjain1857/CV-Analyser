@@ -37,7 +37,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(18, 26, 48, 0.95) 100%);
+  background: var(--gradient-dark-card);
   border: 1px solid var(--border-purple);
   border-radius: var(--radius-md);
   box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);

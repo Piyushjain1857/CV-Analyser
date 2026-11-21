@@ -26,6 +26,7 @@ model User {
   analyses          Analysis[]
   analysisHistories AnalysisHistory[]
   chatMessages      ChatMessage[]
+  builderResumes    BuilderResume[]
 }
 
 model Resume {
@@ -114,4 +115,54 @@ model SystemMetric {
   status         String   @default("healthy")
   responseTimeMs Int      @default(12)
   checkedAt      DateTime @default(now())
+}
+
+model BuilderResume {
+  id               String          @id @default(uuid())
+  userId           String
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String          @default("Untitled Resume")
+  template         String          @default("modern-minimal") // "classic-professional" | "modern-minimal" | "technical-developer"
+  fontFamily       String          @default("sans")           // "sans" | "serif" | "mono"
+  fontSize         String          @default("medium")         // "compact" | "medium" | "spacious"
+  accentColor      String          @default("#8B5CF6")
+  sectionOrder     String[]        @default(["personal", "summary", "experience", "education", "projects", "skills", "certifications", "achievements", "links"])
+  
+  // Structured JSON fields
+  personalInfo     String?         // JSON: { fullName, targetTitle, email, phone, location, linkedin, github, portfolio, website }
+  summary          String?         // text
+  experiences      String?         // JSON: Array<{ id, role, company, location, startDate, endDate, current, bullets: string[] }>
+  education        String?         // JSON: Array<{ id, school, degree, field, startDate, endDate, gpa, honors }>
+  projects         String?         // JSON: Array<{ id, name, description, techStack: string[], link, bullets: string[] }>
+  skills           String?         // JSON: { languages: string[], frameworks: string[], databases: string[], tools: string[], other: string[] }
+  certifications   String?         // JSON: Array<{ id, name, issuer, date, credentialUrl }>
+  achievements     String?         // JSON: Array<{ id, title, description, date }>
+  links            String?         // JSON: Array<{ id, label, url }>
+
+  // Targeted optimization data
+  targetJobTitle   String?
+  targetJobDesc    String?
+  targetMatchScore Int?
+
+  // Version tracking & draft
+  versionName      String?         @default("v1.0")
+  isDraft          Boolean         @default(false)
+  parentId         String?         // For cloned / branched resumes
+
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  versions         ResumeVersion[]
+
+  @@index([userId, createdAt])
+}
+
+model ResumeVersion {
+  id              String        @id @default(uuid())
+  builderResumeId String
+  builderResume   BuilderResume @relation(fields: [builderResumeId], references: [id], onDelete: Cascade)
+  versionName     String
+  contentSnapshot String        // Full JSON snapshot
+  createdAt       DateTime      @default(now())
+
+  @@index([builderResumeId, createdAt])
 }

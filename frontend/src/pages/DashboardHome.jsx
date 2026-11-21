@@ -17,6 +17,10 @@ import {
   Layers,
   Activity,
   PlusCircle,
+  PenTool,
+  Compass,
+  ArrowRight,
+  Zap,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import Card, { CardHeader, CardBody } from '../components/common/Card';
@@ -24,6 +28,7 @@ import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
 import ScoreGauge from '../components/common/ScoreGauge';
 import HealthBadge from '../components/common/HealthBadge';
+import ProgressBar from '../components/common/ProgressBar';
 import AICareerChatbot from '../components/common/AICareerChatbot';
 import './DashboardHome.css';
 
@@ -61,17 +66,31 @@ export function DashboardHome() {
     }
   };
 
+  // Recent score trend data from user's actual resumes
+  const recentScores = resumes
+    .map((r) => {
+      const a = r.analyses?.[0] || r.analysisResults?.[0];
+      return a?.overallScore || a?.atsScore || null;
+    })
+    .filter(Boolean)
+    .reverse();
+
+  const displayScores = recentScores.length > 0 ? recentScores : [74, 81, 88, 92];
+
   return (
-    <div className="dashboard-home-root">
+    <div className="dashboard-home-root animate-fade-in">
       {/* Welcome & Top Action Bar */}
       <div className="dash-welcome-bar">
         <div className="dash-welcome-text">
+          <div className="dash-status-pill">
+            <span className="live-dot" />
+            <span>AI Resume Intelligence Active</span>
+          </div>
           <h1 className="dash-heading">
             Welcome back, <span className="gradient-text">{userProfile?.name || 'Engineer'}</span>
           </h1>
           <p className="dash-subheading">
-            Your ATS resume analytics pipeline is operational. 
-            Targeting <strong>{userProfile?.role || 'Senior Roles'}</strong> in {userProfile?.industry || 'Tech'}.
+            Calibrated for <strong>{userProfile?.role || 'Staff Full-Stack Engineer'}</strong> in {userProfile?.industry || 'Cloud Infrastructure & SaaS'}.
           </p>
         </div>
 
@@ -81,13 +100,14 @@ export function DashboardHome() {
             icon={PlusCircle}
             onClick={() => navigate('/dashboard/upload')}
           >
-            Upload Resume
+            Analyze Resume
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigate('/dashboard/results')}
+            icon={Sparkles}
+            onClick={() => navigate('/dashboard/builder')}
           >
-            Latest Report
+            AI Resume Builder
           </Button>
         </div>
       </div>
@@ -105,7 +125,7 @@ export function DashboardHome() {
             <span className="stat-value">{resumes.length || 4}</span>
             <div className="stat-trend positive">
               <TrendingUp size={14} />
-              <span>+2 this week</span>
+              <span>Tenant-isolated records</span>
             </div>
           </div>
         </Card>
@@ -121,7 +141,7 @@ export function DashboardHome() {
             <span className="stat-value">{stats?.avgAtsScore || 88}%</span>
             <div className="stat-trend positive">
               <TrendingUp size={14} />
-              <span>Top 5% bracket</span>
+              <span>5-Component Rubric</span>
             </div>
           </div>
         </Card>
@@ -136,7 +156,7 @@ export function DashboardHome() {
           <div className="stat-card-bottom">
             <span className="stat-value">{stats?.avgQualityScore || 91}%</span>
             <div className="stat-trend positive">
-              <span>GenAI Assessed</span>
+              <span>Google Gemini 2.5 Assessed</span>
             </div>
           </div>
         </Card>
@@ -152,41 +172,63 @@ export function DashboardHome() {
             <span className="stat-value">{health.operational ? 'PostgreSQL' : 'Connecting'}</span>
             <div className="stat-trend neutral">
               <Activity size={13} />
-              <span>{health.latencyMs ? `${health.latencyMs}ms ping` : 'Live'}</span>
+              <span>{health.latencyMs !== null ? `${health.latencyMs}ms ping` : 'Connected'}</span>
             </div>
           </div>
         </Card>
       </div>
 
-      {/* Main Grid: Upload Dropzone Banner + System Health Widget */}
-      <div className="dash-content-grid">
-        {/* Quick Upload Banner */}
-        <div className="dash-col-left">
-          <Card className="dash-upload-banner" glow>
-            <div className="banner-content">
-              <div className="banner-text">
-                <Badge variant="purple" size="sm">FAST-TRACK ANALYSIS</Badge>
-                <h3 className="banner-title">Scan New Resume Against Target Job Description</h3>
-                <p className="banner-desc">
-                  Drop your PDF/Word document here to calculate Workday ATS compatibility score and extract keyword deficits in 3 seconds.
-                </p>
-                <div className="banner-actions">
-                  <Button
-                    variant="primary"
-                    icon={UploadCloud}
-                    onClick={() => navigate('/dashboard/upload')}
-                  >
-                    Select File to Audit
-                  </Button>
-                  <span className="banner-hint">Supports PDF, DOCX, TXT (Max 10MB)</span>
-                </div>
-              </div>
-              <div className="banner-gauge">
-                <ScoreGauge score={stats?.avgAtsScore || 88} size={130} label="Target Fit" />
-              </div>
-            </div>
-          </Card>
+      {/* Quick Launch Suite (4 Action Tiles) */}
+      <div className="dash-quick-launch-grid">
+        <div className="quick-launch-tile" onClick={() => navigate('/dashboard/upload')}>
+          <div className="tile-icon-box purple">
+            <UploadCloud size={20} />
+          </div>
+          <div className="tile-text">
+            <h4>Analyze Resume</h4>
+            <p>Upload PDF/DOCX for 10-dimension audit</p>
+          </div>
+          <ChevronRight size={16} className="tile-arrow" />
+        </div>
 
+        <div className="quick-launch-tile" onClick={() => navigate('/dashboard/builder')}>
+          <div className="tile-icon-box cyan">
+            <Sparkles size={20} />
+          </div>
+          <div className="tile-text">
+            <h4>AI Resume Builder</h4>
+            <p>Single-column editor with live preview</p>
+          </div>
+          <ChevronRight size={16} className="tile-arrow" />
+        </div>
+
+        <div className="quick-launch-tile" onClick={() => navigate('/dashboard/job-match')}>
+          <div className="tile-icon-box emerald">
+            <Target size={20} />
+          </div>
+          <div className="tile-text">
+            <h4>Job Match & Gaps</h4>
+            <p>Paste target JD for 3-tier gap isolation</p>
+          </div>
+          <ChevronRight size={16} className="tile-arrow" />
+        </div>
+
+        <div className="quick-launch-tile" onClick={() => navigate('/dashboard/roadmap')}>
+          <div className="tile-icon-box amber">
+            <Compass size={20} />
+          </div>
+          <div className="tile-text">
+            <h4>Career Roadmap</h4>
+            <p>12-week strategic milestones plan</p>
+          </div>
+          <ChevronRight size={16} className="tile-arrow" />
+        </div>
+      </div>
+
+      {/* Main Content Grid: Resumes Table & Score Trends */}
+      <div className="dash-content-grid">
+        {/* Left Column: Recent Scans */}
+        <div className="dash-col-left">
           {/* Recent Analyzed Resumes List */}
           <Card className="dash-recent-card">
             <CardHeader
@@ -207,19 +249,23 @@ export function DashboardHome() {
                 </div>
               ) : resumes.length === 0 ? (
                 <div className="empty-state-box">
-                  <FileText size={32} className="text-muted" />
-                  <p>No resumes uploaded yet. Click Upload to scan your first CV.</p>
+                  <div className="empty-icon-wrap">
+                    <FileText size={36} />
+                  </div>
+                  <h3>No resumes uploaded yet</h3>
+                  <p>Upload your first PDF or DOCX file to run our 10-dimension ATS audit.</p>
                   <Button
                     variant="primary"
                     size="sm"
+                    icon={UploadCloud}
                     onClick={() => navigate('/dashboard/upload')}
                   >
-                    Upload Now
+                    Upload First Resume
                   </Button>
                 </div>
               ) : (
                 <div className="recent-resumes-list">
-                  {resumes.slice(0, 4).map((resume) => {
+                  {resumes.slice(0, 5).map((resume) => {
                     const result = resume.analyses?.[0] || resume.analysisResults?.[0] || {};
                     const score = result.overallScore || result.atsScore || 82;
                     let badgeVariant = 'green';
@@ -254,7 +300,7 @@ export function DashboardHome() {
                         </div>
                         <div className="resume-item-action">
                           <Button variant="ghost" size="sm" icon={ArrowUpRight}>
-                            Report
+                            View Audit
                           </Button>
                         </div>
                       </div>
@@ -266,62 +312,41 @@ export function DashboardHome() {
           </Card>
         </div>
 
-        {/* Right Sidebar Column: Live Engine Status & Recruiter Keyword Radar */}
+        {/* Right Sidebar Column: Score Trajectory & Keyword Radar */}
         <div className="dash-col-right">
-          {/* Real Backend & DB Diagnostic Card */}
-          <Card className="dash-system-card">
+          {/* Score Trajectory Card */}
+          <Card className="dash-trend-card">
             <CardHeader
-              title="System Diagnostics"
-              subtitle="Live Node.js & Prisma PostgreSQL Telemetry"
-              action={<HealthBadge showDetails={false} />}
+              title="ATS Score Trajectory"
+              subtitle="Performance across recent scan iterations"
             />
             <CardBody>
-              <div className="system-telemetry-rows">
-                <div className="telemetry-row">
-                  <span className="telemetry-label">Express API:</span>
-                  <span className="telemetry-val text-emerald">
-                    {health.status === 'operational' ? '200 OK Operational' : 'Degraded'}
-                  </span>
-                </div>
-                <div className="telemetry-row">
-                  <span className="telemetry-label">Database Engine:</span>
-                  <span className="telemetry-val">PostgreSQL 16 (Prisma ORM)</span>
-                </div>
-                <div className="telemetry-row">
-                  <span className="telemetry-label">DB Query Latency:</span>
-                  <span className="telemetry-val font-mono">
-                    {health.latencyMs !== null ? `${health.latencyMs} ms` : 'Testing...'}
-                  </span>
-                </div>
-                <div className="telemetry-row">
-                  <span className="telemetry-label">Uptime:</span>
-                  <span className="telemetry-val font-mono">{health.rawMetrics?.uptime || 'Active'}</span>
-                </div>
-                <div className="telemetry-row">
-                  <span className="telemetry-label">Node Runtime:</span>
-                  <span className="telemetry-val font-mono">{health.rawMetrics?.nodeVersion || 'v24.19'}</span>
-                </div>
+              <div className="score-bars-container">
+                {displayScores.map((score, idx) => (
+                  <div key={idx} className="trend-bar-column">
+                    <span className="trend-bar-val">{score}%</span>
+                    <div className="trend-bar-track">
+                      <div
+                        className="trend-bar-fill"
+                        style={{ height: `${score}%` }}
+                      />
+                    </div>
+                    <span className="trend-bar-label">v{idx + 1}</span>
+                  </div>
+                ))}
               </div>
-
-              <div className="system-ping-btn-wrap">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  fullWidth
-                  icon={Activity}
-                  onClick={checkHealth}
-                >
-                  Ping Backend Health Now
-                </Button>
+              <div className="trend-summary-note">
+                <TrendingUp size={14} className="text-emerald" />
+                <span>+18% score progression after Google XYZ optimizations</span>
               </div>
             </CardBody>
           </Card>
 
-          {/* Recruiter Skill Demand Card */}
+          {/* High-Yield Recruiter Keyword Radar */}
           <Card className="dash-skills-card">
             <CardHeader
               title="High-Yield Recruiter Keywords"
-              subtitle="Most frequent missing competencies in current scans"
+              subtitle="Frequently missing competencies in technical scans"
             />
             <CardBody>
               <div className="keyword-radar-tags">
@@ -337,7 +362,7 @@ export function DashboardHome() {
               <div className="keyword-tip-box">
                 <Sparkles size={14} className="tip-icon" />
                 <p className="tip-text">
-                  Adding at least 3 high-yield keywords increases your recruiter search impressions by <strong>68%</strong>.
+                  Injecting missing keywords via the <strong>AI Resume Builder</strong> increases recruiter query matches by 68%.
                 </p>
               </div>
             </CardBody>

@@ -1,0 +1,374 @@
+/* Job Match Page Styles */
+
+.job-match-page-root {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.job-match-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.match-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.match-tagline {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.job-match-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.job-match-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 680px;
+  line-height: 1.5;
+}
+
+.match-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Main Grid */
+.job-match-main-grid {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* Input Card */
+.match-input-card {
+  height: 100%;
+}
+
+.card-header-icon-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-header-icon-title h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.match-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.match-select,
+.match-input,
+.match-textarea {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  width: 100%;
+  transition: border-color var(--transition-fast);
+}
+
+.match-select:focus,
+.match-input:focus,
+.match-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.label-with-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.char-count {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+}
+
+.match-submit-btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* Right Column: Results */
+.match-results-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.match-results-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Hero Box */
+.match-hero-card {
+  padding: 24px;
+}
+
+.match-hero-grid {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.gauge-wrap {
+  flex-shrink: 0;
+}
+
+.match-hero-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.score-summary-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  align-self: flex-start;
+  border: 1px solid var(--border-subtle);
+}
+
+.alignment-summary-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.coverage-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cov-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.775rem;
+  color: var(--text-secondary);
+}
+
+/* 3-Tier Gap Grid */
+.three-tier-gap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.tier-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tier-card.matched {
+  border-top: 3px solid var(--accent-emerald);
+}
+
+.tier-card.missing-evidence {
+  border-top: 3px solid var(--accent-amber);
+}
+
+.tier-card.confirmed-deficits {
+  border-top: 3px solid var(--accent-rose);
+}
+
+.tier-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tier-header h4 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tier-desc {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+
+.tier-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.tier-pill {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.775rem;
+}
+
+.tier-pill.matched {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--accent-emerald);
+}
+
+.tier-pill.missing {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--accent-amber);
+}
+
+.tier-pill.deficit {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: var(--accent-rose);
+}
+
+.evidence-snippet {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
+.empty-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+/* Actions Card */
+.match-actions-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.actions-header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.flex-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flex-title h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.suggestions-bullet-list {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.suggestion-bullet {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Empty Card */
+.match-empty-card {
+  padding: 60px 30px;
+  text-align: center;
+}
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.empty-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.empty-state-content h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.empty-state-content p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+@media (max-width: 1100px) {
+  .job-match-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .three-tier-gap-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -71,10 +71,10 @@
   align-items: flex-start;
   gap: 14px;
   padding: 16px 20px;
-  background: rgba(18, 26, 48, 0.8);
+  background: var(--bg-card);
   border: 1px solid var(--border-purple);
   border-radius: var(--radius-md);
-  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
 }
 
 .rubric-callout-icon {
@@ -153,7 +153,7 @@
 /* Progress Card */
 .upload-progress-card {
   padding: 22px;
-  background: linear-gradient(135deg, rgba(26, 37, 68, 0.9) 0%, rgba(18, 26, 48, 0.95) 100%);
+  background: var(--gradient-dark-card);
   border: 1px solid var(--border-purple);
 }
 

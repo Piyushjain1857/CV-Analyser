@@ -18,6 +18,10 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
       'HistoryPage.jsx',
       'ProfilePage.jsx',
       'NotFoundPage.jsx',
+      'AIResumeBuilder.jsx',
+      'JobMatchPage.jsx',
+      'AICareerAssistantPage.jsx',
+      'CareerRoadmapPage.jsx',
     ];
 
     requiredPages.forEach((page) => {
@@ -74,7 +78,9 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
 
     assert.ok(content.includes('--bg-primary'), 'Theme must define --bg-primary');
     assert.ok(content.includes('--primary'), 'Theme must define --primary');
-    assert.ok(content.includes('#8b5cf6') || content.includes('#6D28D9'), 'Theme must include purple accents');
+    assert.ok(content.includes('#8b5cf6') || content.includes('#8B5CF6'), 'Theme must include purple accents');
+    assert.ok(content.includes('[data-theme="light"]'), 'Theme must define complete light theme overrides');
+    assert.ok(content.includes('prefers-reduced-motion'), 'Theme must support reduced motion accessibility');
   });
 
   test('4. No forbidden libraries (Tailwind, Bootstrap, TypeScript) are imported', () => {
@@ -118,5 +124,43 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
     // Check Executive Summaries and STAR framework
     assert.ok(content.includes('summaryAlternatives'), 'Must render summaryAlternatives');
     assert.ok(content.includes('starFrameworkGuidance'), 'Must render starFrameworkGuidance');
+  });
+
+  test('7. Prompt 8: AI Resume Builder provides split-screen editor, templates and export actions', () => {
+    const builderFile = path.join(srcDir, 'pages', 'AIResumeBuilder.jsx');
+    assert.ok(fs.existsSync(builderFile), 'AIResumeBuilder.jsx must exist');
+    const content = fs.readFileSync(builderFile, 'utf-8');
+
+    assert.ok(content.includes('handlePrint'), 'Must provide print/PDF export');
+    assert.ok(content.includes('handleCopyText'), 'Must provide copy text action');
+    assert.ok(content.includes('applyXyzTransform'), 'Must support Google XYZ transform');
+    assert.ok(content.includes('template-modern') || content.includes("'modern'"), 'Must support Modern Tech template');
+    assert.ok(content.includes("'executive'"), 'Must support Executive template');
+    assert.ok(content.includes("'minimalist'"), 'Must support Minimalist template');
+  });
+
+  test('8. Prompt 8: Sidebar navigation provides all 8 core SaaS application items', () => {
+    const sidebarFile = path.join(srcDir, 'components', 'layout', 'Sidebar.jsx');
+    assert.ok(fs.existsSync(sidebarFile), 'Sidebar.jsx must exist');
+    const content = fs.readFileSync(sidebarFile, 'utf-8');
+
+    assert.ok(content.includes('/dashboard'), 'Must route to Dashboard');
+    assert.ok(content.includes('/dashboard/upload'), 'Must route to Analyze Resume');
+    assert.ok(content.includes('/dashboard/builder'), 'Must route to AI Resume Builder');
+    assert.ok(content.includes('/dashboard/job-match'), 'Must route to Job Match');
+    assert.ok(content.includes('/dashboard/assistant'), 'Must route to AI Career Assistant');
+    assert.ok(content.includes('/dashboard/roadmap'), 'Must route to Career Roadmap');
+    assert.ok(content.includes('/dashboard/history'), 'Must route to History');
+    assert.ok(content.includes('/dashboard/profile'), 'Must route to Settings');
+  });
+
+  test('9. Prompt 8: Landing Page provides authentic capabilities, FAQ accordion and privacy controls', () => {
+    const landingFile = path.join(srcDir, 'pages', 'LandingPage.jsx');
+    assert.ok(fs.existsSync(landingFile), 'LandingPage.jsx must exist');
+    const content = fs.readFileSync(landingFile, 'utf-8');
+
+    assert.ok(content.includes('faqs'), 'Must render interactive FAQs');
+    assert.ok(content.includes('privacy'), 'Must include Privacy & Security section');
+    assert.ok(!content.includes('14,200+'), 'Must not display fabricated statistics');
   });
 });
