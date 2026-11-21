@@ -85,14 +85,16 @@ export function DashboardHome() {
       {/* Welcome & Top Action Bar */}
       <div className="dash-welcome-bar">
         <div className="dash-welcome-text">
-          <div className="dash-status-pill">
-            <span className="live-dot" />
-            <span>AI Resume Intelligence Active</span>
+          <div className="dash-heading-row">
+            <h1 className="dash-heading">
+              {resumes.length === 0 ? 'Welcome,' : 'Welcome back,'}{' '}
+              <span className="gradient-text">{userProfile?.name || 'Applicant'}</span>
+            </h1>
+            <div className="dash-status-pill">
+              <span className="live-dot" />
+              <span>AI Resume Intelligence Active</span>
+            </div>
           </div>
-          <h1 className="dash-heading">
-            {resumes.length === 0 ? 'Welcome,' : 'Welcome back,'}{' '}
-            <span className="gradient-text">{userProfile?.name || 'Applicant'}</span>
-          </h1>
           <p className="dash-subheading">
             {resumes.length === 0 ? (
               'Welcome to your AI Career Intelligence dashboard. Upload your first resume or build one with Gemini to unlock instant 10-dimension ATS audits and gap analysis.'
@@ -108,6 +110,7 @@ export function DashboardHome() {
         <div className="dash-quick-actions">
           <Button
             variant="primary"
+            size="sm"
             icon={PlusCircle}
             onClick={() => navigate('/dashboard/upload')}
           >
@@ -115,6 +118,7 @@ export function DashboardHome() {
           </Button>
           <Button
             variant="outline"
+            size="sm"
             icon={Sparkles}
             onClick={() => navigate('/dashboard/builder')}
           >
@@ -125,27 +129,27 @@ export function DashboardHome() {
 
       {/* Top 4 Stat Cards */}
       <div className="dash-metrics-grid">
-        <Card hover className="dash-stat-card">
+        <Card hover className="dash-stat-card" padding="none">
           <div className="stat-card-top">
             <span className="stat-label">Total Resumes Scanned</span>
             <div className="stat-icon-wrapper purple">
-              <FileText size={18} />
+              <FileText size={15} />
             </div>
           </div>
           <div className="stat-card-bottom">
             <span className="stat-value">{resumes.length}</span>
             <div className="stat-trend positive">
-              <TrendingUp size={14} />
+              <TrendingUp size={13} />
               <span>{resumes.length === 0 ? 'No documents uploaded' : 'Tenant-isolated records'}</span>
             </div>
           </div>
         </Card>
 
-        <Card hover className="dash-stat-card">
+        <Card hover className="dash-stat-card" padding="none">
           <div className="stat-card-top">
             <span className="stat-label">Average ATS Pass Rate</span>
             <div className="stat-icon-wrapper emerald">
-              <CheckCircle2 size={18} />
+              <CheckCircle2 size={15} />
             </div>
           </div>
           <div className="stat-card-bottom">
@@ -153,17 +157,17 @@ export function DashboardHome() {
               {resumes.length > 0 && stats?.avgAtsScore ? `${stats.avgAtsScore}%` : '--'}
             </span>
             <div className="stat-trend positive">
-              <TrendingUp size={14} />
+              <TrendingUp size={13} />
               <span>{resumes.length > 0 && stats?.avgAtsScore ? '5-Component Rubric' : 'No audits conducted yet'}</span>
             </div>
           </div>
         </Card>
 
-        <Card hover className="dash-stat-card">
+        <Card hover className="dash-stat-card" padding="none">
           <div className="stat-card-top">
             <span className="stat-label">Resume Quality Index</span>
             <div className="stat-icon-wrapper cyan">
-              <Sparkles size={18} />
+              <Sparkles size={15} />
             </div>
           </div>
           <div className="stat-card-bottom">
@@ -176,11 +180,11 @@ export function DashboardHome() {
           </div>
         </Card>
 
-        <Card hover className="dash-stat-card">
+        <Card hover className="dash-stat-card" padding="none">
           <div className="stat-card-top">
             <span className="stat-label">Active Database Backend</span>
             <div className="stat-icon-wrapper indigo">
-              <Database size={18} />
+              <Database size={15} />
             </div>
           </div>
           <div className="stat-card-bottom">
@@ -197,46 +201,46 @@ export function DashboardHome() {
       <div className="dash-quick-launch-grid">
         <div className="quick-launch-tile" onClick={() => navigate('/dashboard/upload')}>
           <div className="tile-icon-box purple">
-            <UploadCloud size={20} />
+            <UploadCloud size={16} />
           </div>
           <div className="tile-text">
             <h4>Analyze Resume</h4>
             <p>Upload PDF/DOCX for 10-dimension audit</p>
           </div>
-          <ChevronRight size={16} className="tile-arrow" />
+          <ChevronRight size={14} className="tile-arrow" />
         </div>
 
         <div className="quick-launch-tile" onClick={() => navigate('/dashboard/builder')}>
           <div className="tile-icon-box cyan">
-            <Sparkles size={20} />
+            <Sparkles size={16} />
           </div>
           <div className="tile-text">
             <h4>AI Resume Builder</h4>
             <p>Single-column editor with live preview</p>
           </div>
-          <ChevronRight size={16} className="tile-arrow" />
+          <ChevronRight size={14} className="tile-arrow" />
         </div>
 
         <div className="quick-launch-tile" onClick={() => navigate('/dashboard/job-match')}>
           <div className="tile-icon-box emerald">
-            <Target size={20} />
+            <Target size={16} />
           </div>
           <div className="tile-text">
             <h4>Job Match & Gaps</h4>
             <p>Paste target JD for 3-tier gap isolation</p>
           </div>
-          <ChevronRight size={16} className="tile-arrow" />
+          <ChevronRight size={14} className="tile-arrow" />
         </div>
 
         <div className="quick-launch-tile" onClick={() => navigate('/dashboard/roadmap')}>
           <div className="tile-icon-box amber">
-            <Compass size={20} />
+            <Compass size={16} />
           </div>
           <div className="tile-text">
             <h4>Career Roadmap</h4>
             <p>12-week strategic milestones plan</p>
           </div>
-          <ChevronRight size={16} className="tile-arrow" />
+          <ChevronRight size={14} className="tile-arrow" />
         </div>
       </div>
 
@@ -245,7 +249,7 @@ export function DashboardHome() {
         {/* Left Column: Recent Scans */}
         <div className="dash-col-left">
           {/* Recent Analyzed Resumes List */}
-          <Card className="dash-recent-card">
+          <Card className="dash-recent-card" padding="none">
             <CardHeader
               title="Recent Resume Audits"
               subtitle="Latest applicant scans and ATS scoring breakdown"
@@ -256,7 +260,7 @@ export function DashboardHome() {
                 </Link>
               }
             />
-            <CardBody>
+            <CardBody className="dash-card-body-fill">
               {loadingResumes ? (
                 <div className="loading-state-box">
                   <span className="btn-spinner" />
@@ -265,7 +269,7 @@ export function DashboardHome() {
               ) : resumes.length === 0 ? (
                 <div className="empty-state-box">
                   <div className="empty-icon-wrap">
-                    <UploadCloud size={32} className="text-violet" />
+                    <UploadCloud size={24} className="text-violet" />
                   </div>
                   <h3>Ready for your first ATS Intelligence audit?</h3>
                   <p>
@@ -273,13 +277,13 @@ export function DashboardHome() {
                   </p>
                   <div className="onboarding-perks-row">
                     <span className="perk-pill">
-                      <CheckCircle2 size={13} className="text-emerald" /> 10-Dimension Scoring
+                      <CheckCircle2 size={12} className="text-emerald" /> 10-Dimension Scoring
                     </span>
                     <span className="perk-pill">
-                      <CheckCircle2 size={13} className="text-emerald" /> Google XYZ Rewrites
+                      <CheckCircle2 size={12} className="text-emerald" /> Google XYZ Rewrites
                     </span>
                     <span className="perk-pill">
-                      <CheckCircle2 size={13} className="text-emerald" /> Tenant-Isolated Encryption
+                      <CheckCircle2 size={12} className="text-emerald" /> Tenant-Isolated Encryption
                     </span>
                   </div>
                   <div className="empty-actions-row">
@@ -317,7 +321,7 @@ export function DashboardHome() {
                         onClick={() => handleViewResume(resume)}
                       >
                         <div className="resume-item-icon">
-                          <FileText size={20} />
+                          <FileText size={18} />
                         </div>
                         <div className="resume-item-main">
                           <div className="resume-item-title-row">
@@ -353,7 +357,7 @@ export function DashboardHome() {
         {/* Right Sidebar Column: Score Trajectory & Keyword Radar */}
         <div className="dash-col-right">
           {/* Score Trajectory Card */}
-          <Card className="dash-trend-card">
+          <Card className="dash-trend-card" padding="none">
             <CardHeader
               title="ATS Score Trajectory"
               subtitle={
@@ -362,11 +366,11 @@ export function DashboardHome() {
                   : 'Iteration progression tracker'
               }
             />
-            <CardBody>
+            <CardBody className="dash-card-body-fill">
               {recentScores.length === 0 ? (
                 <div className="trajectory-empty-state">
                   <div className="trajectory-empty-icon-box">
-                    <TrendingUp size={24} className="text-violet" />
+                    <TrendingUp size={20} className="text-violet" />
                   </div>
                   <h4 className="trajectory-empty-title">No Trajectory Recorded Yet</h4>
                   <p className="trajectory-empty-desc">
@@ -389,7 +393,7 @@ export function DashboardHome() {
                     </div>
                   </div>
                   <div className="trend-summary-note neutral">
-                    <Sparkles size={13} className="text-violet" />
+                    <Sparkles size={12} className="text-violet" />
                     <span>Scores will populate after your first upload</span>
                   </div>
                 </div>
@@ -410,7 +414,7 @@ export function DashboardHome() {
                     ))}
                   </div>
                   <div className="trend-summary-note">
-                    <TrendingUp size={14} className="text-emerald" />
+                    <TrendingUp size={13} className="text-emerald" />
                     <span>
                       {recentScores.length > 1
                         ? `${scoreDelta >= 0 ? `+${scoreDelta}%` : `${scoreDelta}%`} progression across iterations`
@@ -421,32 +425,6 @@ export function DashboardHome() {
               )}
             </CardBody>
           </Card>
-
-          {/* High-Yield Recruiter Keyword Radar */}
-          {/* <Card className="dash-skills-card">
-            <CardHeader
-              title="High-Yield Recruiter Keywords"
-              subtitle="Industry benchmark competencies for technical roles"
-            />
-            <CardBody>
-              <div className="keyword-radar-tags">
-                <span className="radar-tag high">Kubernetes (+18 pts)</span>
-                <span className="radar-tag high">TypeScript (+15 pts)</span>
-                <span className="radar-tag med">System Design (+12 pts)</span>
-                <span className="radar-tag med">PostgreSQL (+10 pts)</span>
-                <span className="radar-tag low">CI/CD Pipelines (+8 pts)</span>
-                <span className="radar-tag low">Docker Containerization (+8 pts)</span>
-                <span className="radar-tag low">Microservices (+7 pts)</span>
-              </div>
-
-              <div className="keyword-tip-box">
-                <Sparkles size={14} className="tip-icon" />
-                <p className="tip-text">
-                  Injecting missing keywords via the <strong>AI Resume Builder</strong> increases recruiter query matches by 68%.
-                </p>
-              </div>
-            </CardBody>
-          </Card> */}
         </div>
       </div>
 

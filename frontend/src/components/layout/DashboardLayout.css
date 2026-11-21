@@ -25,9 +25,40 @@
   margin: 0 auto;
 }
 
+/* Desktop 100vh strictly fitting rules for Dashboard Home */
+@media (min-width: 1025px) {
+  .dashboard-layout-main.no-page-scroll {
+    overflow: hidden !important;
+    height: 100vh;
+  }
+
+  .dashboard-content-area.dashboard-home-fit {
+    height: calc(100vh - 64px);
+    max-height: calc(100vh - 64px);
+    padding: 12px 24px 14px 24px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden !important;
+    box-sizing: border-box;
+  }
+}
+
 @media (max-width: 1024px) {
+  .dashboard-layout-main.no-page-scroll {
+    overflow-y: auto !important;
+    height: auto;
+    min-height: 100vh;
+  }
+
   .dashboard-content-area {
     padding: 24px 24px 48px 24px;
+  }
+
+  .dashboard-content-area.dashboard-home-fit {
+    height: auto;
+    max-height: none;
+    overflow: visible !important;
+    padding: 20px 16px 40px 16px;
   }
 }
 
