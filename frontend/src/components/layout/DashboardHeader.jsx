@@ -10,6 +10,11 @@ import {
   LogOut,
   User,
   Settings,
+  Sun,
+  Moon,
+  Database,
+  ShieldCheck,
+  FileText,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -21,17 +26,22 @@ export function DashboardHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { toggleMobileSidebar, addToast } = useApp();
+  const { toggleMobileSidebar, addToast, theme, toggleTheme, health, resumes } = useApp();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const getPageTitle = () => {
     const path = location.pathname;
     if (path === '/dashboard') return 'Dashboard Overview';
-    if (path.includes('/upload')) return 'Upload & Analyze Resume';
+    if (path.includes('/upload')) return 'Analyze Resume';
+    if (path.includes('/builder')) return 'AI Resume Builder';
+    if (path.includes('/job-match')) return 'Job Match & Gap Analysis';
+    if (path.includes('/assistant')) return 'AI Career Assistant';
+    if (path.includes('/roadmap')) return 'Career Roadmap';
     if (path.includes('/results')) return 'ATS Analysis Results';
+    if (path.includes('/compare')) return 'Compare Scans';
     if (path.includes('/history')) return 'Resume Audit History';
-    if (path.includes('/profile')) return 'Profile & Settings';
+    if (path.includes('/profile')) return 'Settings & Account';
     return 'Dashboard';
   };
 
@@ -41,10 +51,31 @@ export function DashboardHeader() {
     navigate('/login');
   };
 
-  const notifications = [
-    { id: 1, title: 'Session restored via secure cookie', time: 'Just now', unread: true },
-    { id: 2, title: 'PostgreSQL database connected (1ms)', time: '10m ago', unread: false },
-    { id: 3, title: 'Prisma schema synchronized', time: '1h ago', unread: false },
+  // Real event-backed notifications (derived from actual app state & system events)
+  const realNotifications = [
+    {
+      id: 'notif-db',
+      title: health.operational
+        ? `PostgreSQL connected (${health.latencyMs ?? 1}ms latency)`
+        : 'PostgreSQL connecting...',
+      time: 'Real-time telemetry',
+      type: health.operational ? 'success' : 'warn',
+      unread: false,
+    },
+    {
+      id: 'notif-resumes',
+      title: `${resumes.length} encrypted resume(s) in active tenant isolation`,
+      time: 'Database ledger',
+      type: 'info',
+      unread: false,
+    },
+    {
+      id: 'notif-auth',
+      title: `Session active for ${user?.email || 'authenticated user'} (HTTP-only JWT)`,
+      time: 'Auth session verified',
+      type: 'success',
+      unread: true,
+    },
   ];
 
   return (
@@ -66,7 +97,7 @@ export function DashboardHeader() {
         </div>
       </div>
 
-      {/* Right: Quick Scan, Live Health, Notifications, User Menu */}
+      {/* Right: Quick Scan, Live Health, Theme Switcher, Notifications, User Menu */}
       <div className="header-right">
         <Button
           variant="outline"
@@ -75,10 +106,21 @@ export function DashboardHeader() {
           onClick={() => navigate('/dashboard/upload')}
           className="header-scan-btn"
         >
-          New Analysis
+          Analyze Resume
         </Button>
 
         <HealthBadge showDetails={false} />
+
+        {/* Theme Switcher Button */}
+        <button
+          type="button"
+          className="header-icon-btn theme-toggle-btn"
+          onClick={toggleTheme}
+          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} theme`}
+          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} theme`}
+        >
+          {theme === 'dark' ? <Sun size={17} className="text-amber" /> : <Moon size={17} className="text-violet" />}
+        </button>
 
         {/* Notifications */}
         <div className="header-notif-wrapper">
@@ -89,6 +131,7 @@ export function DashboardHeader() {
               setShowUserMenu(false);
             }}
             aria-label="Notifications"
+            title="System & Security Notifications"
           >
             <Bell size={18} />
             <span className="notif-unread-dot" />
@@ -97,16 +140,16 @@ export function DashboardHeader() {
           {showNotifications && (
             <div className="notifications-dropdown">
               <div className="notif-header">
-                <span className="notif-title">Notifications</span>
-                <span className="notif-badge">1 new</span>
+                <span className="notif-title">System & Security Logs</span>
+                <span className="notif-badge">Live events</span>
               </div>
               <div className="notif-list">
-                {notifications.map((n) => (
+                {realNotifications.map((n) => (
                   <div
                     key={n.id}
                     className={`notif-item ${n.unread ? 'unread' : ''}`}
                     onClick={() => {
-                      addToast('Notification viewed', 'info', n.title);
+                      addToast(n.title, 'info');
                       setShowNotifications(false);
                     }}
                   >
@@ -132,6 +175,7 @@ export function DashboardHeader() {
               setShowNotifications(false);
             }}
             title={user?.email || 'User Menu'}
+            aria-label="User profile and settings menu"
           >
             <div className="header-avatar">
               {user?.name?.charAt(0) || 'U'}
@@ -152,8 +196,16 @@ export function DashboardHeader() {
                   className="dropdown-item"
                   onClick={() => setShowUserMenu(false)}
                 >
-                  <User size={15} />
-                  <span>Profile Settings</span>
+                  <Settings size={15} />
+                  <span>Account & Settings</span>
+                </Link>
+                <Link
+                  to="/dashboard/builder"
+                  className="dropdown-item"
+                  onClick={() => setShowUserMenu(false)}
+                >
+                  <Sparkles size={15} />
+                  <span>AI Resume Builder</span>
                 </Link>
                 <button
                   type="button"

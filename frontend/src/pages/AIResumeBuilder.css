@@ -1,0 +1,670 @@
+/* AI Resume Builder Styles */
+
+.resume-builder-root {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Top Bar */
+.builder-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.builder-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.builder-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.builder-tagline {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.builder-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+
+.builder-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Template Selector Pills */
+.template-picker-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.picker-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0 6px;
+}
+
+.template-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.template-pill:hover {
+  color: var(--text-primary);
+}
+
+.template-pill.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* Split Screen Workspace */
+.builder-workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* Left: Editor Pane */
+.builder-editor-pane {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.editor-nav-tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  overflow-x: auto;
+}
+
+.editor-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.editor-tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
+.editor-tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: var(--bg-card);
+}
+
+.editor-form-scroll {
+  padding: 24px;
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+}
+
+.editor-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.editor-card-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.editor-card-desc {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-top: -12px;
+  margin-bottom: 4px;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-field input,
+.editor-textarea,
+.bullet-textarea {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  transition: border-color var(--transition-fast);
+  width: 100%;
+}
+
+.form-field input:focus,
+.editor-textarea:focus,
+.bullet-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.editor-textarea {
+  line-height: 1.5;
+  resize: vertical;
+}
+
+/* AI Summary Chips */
+.ai-suggestion-box {
+  background: var(--primary-light);
+  border: 1px solid var(--border-purple);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.suggestion-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.suggestion-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.summary-quick-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.summary-chip {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-purple);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.summary-chip:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* Experience Editor Block */
+.experience-editor-block,
+.education-editor-block {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.exp-block-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exp-num-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.exp-role-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.bullets-editor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bullets-label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.bullet-edit-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.bullet-textarea {
+  flex: 1;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.bullet-row-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bullet-xyz-btn {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--border-purple);
+  padding: 5px 7px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.bullet-xyz-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.bullet-del-btn {
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid var(--border-subtle);
+  padding: 5px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.bullet-del-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-rose);
+  border-color: var(--accent-rose);
+}
+
+.add-bullet-btn {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Right: Preview Pane */
+.builder-preview-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.preview-top-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.preview-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+}
+
+.preview-template-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.preview-paper-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  justify-content: center;
+}
+
+/* The Printable White Paper Document */
+.resume-paper {
+  width: 100%;
+  max-width: 680px;
+  background: #ffffff;
+  color: #111827;
+  padding: 40px 44px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  line-height: 1.45;
+  font-size: 0.8125rem;
+}
+
+/* Template: Modern Tech */
+.resume-paper.template-modern .paper-header {
+  border-bottom: 2px solid #8b5cf6;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.resume-paper.template-modern .paper-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.resume-paper.template-modern .paper-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #7c3aed;
+  margin-top: 2px;
+}
+
+.resume-paper.template-modern .paper-section-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.resume-paper.template-modern .paper-section-divider {
+  height: 1px;
+  background: #cbd5e1;
+  margin: 4px 0 10px 0;
+}
+
+/* Template: Executive */
+.resume-paper.template-executive .paper-header {
+  text-align: center;
+  border-bottom: 2px solid #1e293b;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.resume-paper.template-executive .paper-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+.resume-paper.template-executive .paper-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 3px;
+}
+
+.resume-paper.template-executive .paper-contact-row {
+  justify-content: center;
+}
+
+.resume-paper.template-executive .paper-section-title {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #0f172a;
+  border-bottom: 1px solid #94a3b8;
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.resume-paper.template-executive .paper-section-divider {
+  display: none;
+}
+
+/* Template: Minimalist Single-Column ATS */
+.resume-paper.template-minimalist {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #000000;
+}
+
+.resume-paper.template-minimalist .paper-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.resume-paper.template-minimalist .paper-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333333;
+}
+
+.resume-paper.template-minimalist .paper-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: 0.05em;
+}
+
+.resume-paper.template-minimalist .paper-section-divider {
+  height: 1px;
+  background: #000000;
+  margin: 3px 0 8px 0;
+}
+
+/* Common Paper Styles */
+.paper-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: #475569;
+  margin-top: 6px;
+}
+
+.paper-contact-row .dot {
+  color: #94a3b8;
+}
+
+.paper-section {
+  margin-bottom: 16px;
+}
+
+.paper-summary-text {
+  font-size: 0.8rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.paper-experience-item {
+  margin-bottom: 12px;
+}
+
+.paper-exp-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.paper-exp-role {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.paper-exp-company {
+  font-weight: 600;
+  color: #475569;
+}
+
+.paper-exp-period,
+.paper-exp-loc {
+  font-size: 0.725rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.paper-bullet-list {
+  padding-left: 18px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.paper-bullet-item {
+  font-size: 0.775rem;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.paper-skills-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.775rem;
+}
+
+.paper-skill-row strong {
+  color: #0f172a;
+}
+
+.paper-skill-row span {
+  color: #334155;
+}
+
+.paper-edu-item {
+  margin-bottom: 6px;
+}
+
+.paper-edu-honors {
+  font-size: 0.725rem;
+  color: #64748b;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* Print CSS */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #resume-printable-doc,
+  #resume-printable-doc * {
+    visibility: visible;
+  }
+
+  #resume-printable-doc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .builder-workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-form-scroll {
+    max-height: none;
+  }
+
+  .preview-paper-container {
+    max-height: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .builder-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

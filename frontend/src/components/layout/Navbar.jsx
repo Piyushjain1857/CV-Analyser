@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sparkles, ArrowRight, Menu, X, LogIn, LogOut, User } from 'lucide-react';
+import {
+  Sparkles,
+  ArrowRight,
+  Menu,
+  X,
+  LogIn,
+  LogOut,
+  User,
+  Sun,
+  Moon,
+} from 'lucide-react';
 import HealthBadge from '../common/HealthBadge';
 import Button from '../common/Button';
 import { useAuth } from '../../context/AuthContext';
@@ -11,7 +21,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
-  const { addToast } = useApp();
+  const { addToast, theme, toggleTheme } = useApp();
 
   const handleLogout = async () => {
     await logout();
@@ -29,7 +39,7 @@ export function Navbar() {
           </div>
           <div className="brand-text-group">
             <span className="brand-name">CV Insight <span className="brand-ai">AI</span></span>
-            <span className="brand-sub">ATS Intelligence</span>
+            <span className="brand-sub">ATS Intelligence SaaS</span>
           </div>
         </Link>
 
@@ -37,15 +47,27 @@ export function Navbar() {
         <nav className="nav-links-desktop">
           <a href="#features" className="nav-link">Features</a>
           <a href="#how-it-works" className="nav-link">How It Works</a>
-          <a href="#metrics" className="nav-link">ATS Benchmarks</a>
+          <a href="#privacy" className="nav-link">Privacy & Security</a>
+          <a href="#faqs" className="nav-link">FAQs</a>
           {isAuthenticated && (
             <Link to="/dashboard" className="nav-link highlight">Dashboard</Link>
           )}
         </nav>
 
-        {/* Right CTA & Health Status */}
+        {/* Right CTA & Health Status & Theme Switcher */}
         <div className="nav-actions-desktop">
           <HealthBadge showDetails={false} />
+
+          {/* Theme switcher */}
+          <button
+            type="button"
+            className="navbar-theme-btn"
+            onClick={toggleTheme}
+            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+            aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+          >
+            {theme === 'dark' ? <Sun size={17} className="text-amber" /> : <Moon size={17} className="text-violet" />}
+          </button>
 
           {isAuthenticated ? (
             <div className="nav-user-cluster">
@@ -60,6 +82,7 @@ export function Navbar() {
                 className="nav-logout-btn"
                 onClick={handleLogout}
                 title="Log out"
+                aria-label="Log out"
               >
                 <LogOut size={16} />
               </button>
@@ -97,7 +120,20 @@ export function Navbar() {
         <div className="navbar-mobile-drawer">
           <a href="#features" onClick={() => setMobileOpen(false)} className="mobile-nav-link">Features</a>
           <a href="#how-it-works" onClick={() => setMobileOpen(false)} className="mobile-nav-link">How It Works</a>
-          <a href="#metrics" onClick={() => setMobileOpen(false)} className="mobile-nav-link">ATS Benchmarks</a>
+          <a href="#privacy" onClick={() => setMobileOpen(false)} className="mobile-nav-link">Privacy & Security</a>
+          <a href="#faqs" onClick={() => setMobileOpen(false)} className="mobile-nav-link">FAQs</a>
+
+          <div className="mobile-theme-row">
+            <span>Interface Theme</span>
+            <button
+              type="button"
+              className="navbar-theme-btn"
+              onClick={toggleTheme}
+            >
+              {theme === 'dark' ? <Sun size={17} className="text-amber" /> : <Moon size={17} className="text-violet" />}
+              <span style={{ fontSize: '0.8rem', marginLeft: '6px' }}>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+            </button>
+          </div>
           
           {isAuthenticated ? (
             <>

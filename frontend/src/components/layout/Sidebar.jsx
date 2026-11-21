@@ -3,34 +3,47 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   UploadCloud,
+  Sparkles,
+  Target,
+  Cpu,
+  Compass,
+  History,
+  Settings,
   FileCheck2,
   GitCompare,
-  History,
-  UserCheck,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   Zap,
   LogOut,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
-import HealthBadge from '../common/HealthBadge';
 import './Sidebar.css';
 
 export function Sidebar({ collapsed, setCollapsed }) {
-  const { isMobileSidebarOpen, setIsMobileSidebarOpen } = useApp();
+  const { isMobileSidebarOpen, setIsMobileSidebarOpen, theme, toggleTheme } = useApp();
   const { user, logout } = useAuth();
   const { addToast } = useApp();
   const navigate = useNavigate();
 
-  const navItems = [
-    { to: '/dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
-    { to: '/dashboard/upload', label: 'Upload & Scan', icon: UploadCloud },
+  // 8 Primary Navigation Items requested in Prompt 8
+  const primaryNavItems = [
+    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+    { to: '/dashboard/upload', label: 'Analyze Resume', icon: UploadCloud, pill: 'AI Scan' },
+    { to: '/dashboard/builder', label: 'AI Resume Builder', icon: Sparkles, pill: 'PRO' },
+    { to: '/dashboard/job-match', label: 'Job Match', icon: Target },
+    { to: '/dashboard/assistant', label: 'AI Career Assistant', icon: Cpu },
+    { to: '/dashboard/roadmap', label: 'Career Roadmap', icon: Compass },
+    { to: '/dashboard/history', label: 'History', icon: History },
+    { to: '/dashboard/profile', label: 'Settings', icon: Settings },
+  ];
+
+  // Secondary analysis views
+  const secondaryNavItems = [
     { to: '/dashboard/results', label: 'Analysis Results', icon: FileCheck2 },
     { to: '/dashboard/compare', label: 'Compare Scans', icon: GitCompare },
-    { to: '/dashboard/history', label: 'Audit History', icon: History },
-    { to: '/dashboard/profile', label: 'Profile & Settings', icon: UserCheck },
   ];
 
   const handleLinkClick = () => {
@@ -67,16 +80,18 @@ export function Sidebar({ collapsed, setCollapsed }) {
             </div>
             {!collapsed && (
               <div className="sidebar-brand-text">
-                <span className="brand-title">CV Insight</span>
-                <span className="brand-badge">SaaS AI</span>
+                <span className="brand-title">CV Insight AI</span>
+                <span className="brand-badge">Enterprise SaaS</span>
               </div>
             )}
           </Link>
 
           <button
+            type="button"
             className="sidebar-collapse-btn"
             onClick={() => setCollapsed(!collapsed)}
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
@@ -87,7 +102,7 @@ export function Sidebar({ collapsed, setCollapsed }) {
           <div className="sidebar-nav-section-title">
             {!collapsed && <span>MAIN NAVIGATION</span>}
           </div>
-          {navItems.map((item) => {
+          {primaryNavItems.map((item) => {
             const Icon = item.icon;
             return (
               <NavLink
@@ -104,8 +119,31 @@ export function Sidebar({ collapsed, setCollapsed }) {
                 {!collapsed && (
                   <span className="sidebar-nav-label">{item.label}</span>
                 )}
-                {item.to === '/dashboard/upload' && !collapsed && (
-                  <span className="sidebar-new-pill">Scan</span>
+                {item.pill && !collapsed && (
+                  <span className="sidebar-new-pill">{item.pill}</span>
+                )}
+              </NavLink>
+            );
+          })}
+
+          <div className="sidebar-nav-section-title" style={{ marginTop: '12px' }}>
+            {!collapsed && <span>AUDIT VIEWS</span>}
+          </div>
+          {secondaryNavItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={handleLinkClick}
+                className={({ isActive }) =>
+                  `sidebar-nav-item ${isActive ? 'active' : ''}`
+                }
+                title={collapsed ? item.label : undefined}
+              >
+                <Icon size={17} className="sidebar-nav-icon" />
+                {!collapsed && (
+                  <span className="sidebar-nav-label">{item.label}</span>
                 )}
               </NavLink>
             );
@@ -120,26 +158,26 @@ export function Sidebar({ collapsed, setCollapsed }) {
               <span className="widget-title">Target ATS Index</span>
             </div>
             <p className="widget-desc">
-              Calibrated for {user?.role || 'Senior Software Engineer'}.
+              Calibrated for {user?.role || 'Staff Full-Stack Engineer'}.
             </p>
             <div className="widget-progress">
               <div className="widget-bar" style={{ width: `${user?.targetScore || 90}%` }} />
             </div>
             <div className="widget-meta">
-              <span>Goal: {user?.targetScore || 90}/100</span>
-              <span className="widget-high">Personalized</span>
+              <span>Benchmark: {user?.targetScore || 90}/100</span>
+              <span className="widget-high">ATS Ready</span>
             </div>
           </div>
         )}
 
-        {/* Sidebar Footer / User snapshot & Logout */}
+        {/* Sidebar Footer / User snapshot & Quick Theme & Logout */}
         <div className="sidebar-footer">
           <div className="sidebar-footer-row">
             <Link
               to="/dashboard/profile"
               className="sidebar-user-card"
               onClick={handleLinkClick}
-              title={user?.email || 'User Profile'}
+              title={user?.email || 'User Settings'}
             >
               <div className="sidebar-user-avatar">
                 {user?.name?.charAt(0) || 'U'}

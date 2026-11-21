@@ -22,6 +22,7 @@ router.get('/:id/pdf', exportAnalysisPdf);
 router.get('/:id', getAnalysisById);
 router.delete('/:id', deleteAnalysis);
 router.post('/:id/match-jd', aiAnalysisLimiter, reanalyzeWithJobDescription);
+router.post('/rematch/:id', aiAnalysisLimiter, reanalyzeWithJobDescription);
 router.post('/preview', analyzeCustomText);
 
 export default router;

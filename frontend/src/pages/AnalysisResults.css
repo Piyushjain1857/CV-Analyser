@@ -2095,3 +2095,320 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ========================================================
+   EXPLAINABLE ATS RUBRIC BREAKDOWN & FACTUAL VS INFERENCE STYLES
+   ======================================================== */
+
+.ats-rubric-breakdown-card {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.rubric-components-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rubric-component-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rubric-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rubric-item-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.rubric-item-weight {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--primary-light);
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.rubric-item-evidence {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.rubric-item-evidence strong {
+  color: #6ee7b7;
+}
+
+.rubric-item-fix {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.rubric-item-fix strong {
+  color: #c4b5fd;
+}
+
+/* Factual Extraction vs. AI Inferences */
+.factual-vs-inference-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.factual-card,
+.inference-card {
+  padding: 24px;
+}
+
+.extraction-group,
+.inference-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 14px;
+}
+
+.extraction-group:last-child,
+.inference-group:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.extraction-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.fact-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fact-pill {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.fact-pill.link {
+  color: #67e8f9;
+  border-color: rgba(6, 182, 212, 0.3);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.fact-pill.skill {
+  color: #c4b5fd;
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.fact-text {
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.fact-bullet-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 0;
+  margin: 0;
+}
+
+.fact-bullet-item {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #6ee7b7;
+  padding-left: 14px;
+  position: relative;
+}
+
+.fact-bullet-item::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: 700;
+}
+
+.inference-text {
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 4px 0 0 0;
+}
+
+.writing-quality-box {
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wq-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.775rem;
+  color: var(--text-secondary);
+}
+
+.wq-row strong {
+  color: #ffffff;
+}
+
+.wq-tone {
+  font-size: 0.775rem;
+  font-style: italic;
+  color: #c4b5fd;
+  margin: 4px 0 0 0;
+}
+
+.missing-sec-pill {
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+
+/* Job Matching 3-Col Breakdown */
+.jd-matching-breakdown-card {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.jd-evidence-trio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.evidence-trio-col {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.evidence-trio-col.matched {
+  border-top: 3px solid #10b981;
+}
+
+.evidence-trio-col.missing-evidence {
+  border-top: 3px solid #f59e0b;
+}
+
+.evidence-trio-col.confirmed-gap {
+  border-top: 3px solid #ef4444;
+}
+
+.trio-col-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trio-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.trio-sub {
+  font-size: 0.785rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.trio-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trio-item-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trio-req-name {
+  font-size: 0.835rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.trio-evidence-cite {
+  font-size: 0.75rem;
+  color: #6ee7b7;
+  line-height: 1.4;
+}
+
+.trio-explanation {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.trio-recommendation {
+  font-size: 0.725rem;
+  color: #c4b5fd;
+  line-height: 1.4;
+}
+
+@media (max-width: 1080px) {
+  .factual-vs-inference-grid,
+  .jd-evidence-trio-grid {
+    grid-template-columns: 1fr;
+  }
+}

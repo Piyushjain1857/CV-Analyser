@@ -7,6 +7,54 @@ const AppContext = createContext(null);
 export function AppProvider({ children }) {
   const { user, isAuthenticated } = useAuth();
 
+  // Theme Management (Dark / Light)
+  const [theme, setTheme] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cv_insight_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        return 'light';
+      }
+    } catch {
+      // Ignore localStorage errors
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    try {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('cv_insight_theme', theme);
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  }, []);
+
+  // Sidebar Collapse state
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem('cv_insight_sidebar_collapsed') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const toggleSidebarCollapse = useCallback(() => {
+    setIsSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('cv_insight_sidebar_collapsed', String(next));
+      } catch {
+        // Ignore
+      }
+      return next;
+    });
+  }, []);
+
   // Backend health state
   const [health, setHealth] = useState({
     status: 'checking',
@@ -155,6 +203,12 @@ export function AppProvider({ children }) {
   }, [isAuthenticated, user, fetchResumes, fetchStats, fetchProfile, fetchLatestAnalysis]);
 
   const value = {
+    theme,
+    setTheme,
+    toggleTheme,
+    isSidebarCollapsed,
+    setIsSidebarCollapsed,
+    toggleSidebarCollapse,
     health,
     checkHealth,
     resumes,
@@ -185,3 +239,5 @@ export function useApp() {
   }
   return context;
 }
+
+export default AppContext;

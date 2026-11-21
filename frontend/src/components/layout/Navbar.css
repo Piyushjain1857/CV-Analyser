@@ -2,10 +2,12 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(7, 10, 18, 0.85);
+  background: var(--bg-glass);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-subtle);
   width: 100%;
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 .navbar-container {
@@ -33,7 +35,7 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.45);
+  box-shadow: 0 0 15px var(--primary-glow);
 }
 
 .brand-icon {
@@ -48,8 +50,8 @@
 .brand-name {
   font-size: 1.15rem;
   font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
   line-height: 1.1;
 }
 
@@ -82,7 +84,7 @@
 }
 
 .nav-link:hover {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .nav-link.highlight {
@@ -93,7 +95,28 @@
 .nav-actions-desktop {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+}
+
+.navbar-theme-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.navbar-theme-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
 }
 
 .nav-auth-buttons {
@@ -110,7 +133,7 @@
 }
 
 .nav-signin-link:hover {
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .nav-user-cluster {
@@ -124,8 +147,8 @@
   align-items: center;
   gap: 8px;
   padding: 4px 10px 4px 4px;
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-medium);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-full);
   text-decoration: none;
   transition: all var(--transition-fast);
@@ -133,6 +156,7 @@
 
 .nav-user-chip:hover {
   border-color: var(--primary);
+  background: var(--bg-card-hover);
 }
 
 .nav-user-avatar {
@@ -177,6 +201,16 @@
 
 .navbar-mobile-drawer {
   display: none;
+}
+
+.mobile-theme-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 @media (max-width: 860px) {
