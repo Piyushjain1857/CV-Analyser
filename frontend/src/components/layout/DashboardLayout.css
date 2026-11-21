@@ -1,0 +1,29 @@
+.dashboard-layout-root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.dashboard-layout-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.dashboard-content-area {
+  flex: 1;
+  padding: 32px 36px 60px 36px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .dashboard-content-area {
+    padding: 20px 16px 40px 16px;
+  }
+}

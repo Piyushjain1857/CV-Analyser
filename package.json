@@ -1,0 +1,17 @@
+{
+  "name": "cv-insight-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CV Insight AI - AI-Powered Resume Analyzer and ATS Optimization SaaS",
+  "scripts": {
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"magenta,cyan\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "install:all": "npm install && npm --prefix backend install && npm --prefix frontend install",
+    "db:setup": "npm --prefix backend run db:setup",
+    "build": "npm --prefix frontend run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

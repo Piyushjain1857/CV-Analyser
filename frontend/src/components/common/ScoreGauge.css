@@ -1,0 +1,68 @@
+.score-gauge-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.score-gauge-svg {
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.score-gauge-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.score-gauge-fill {
+  fill: none;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.3));
+}
+
+.score-gauge-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  user-select: none;
+}
+
+.score-gauge-number {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+  font-family: var(--font-sans);
+  letter-spacing: -0.03em;
+}
+
+.score-gauge-sublabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.score-gauge-title {
+  font-size: 0.725rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.score-gauge-badge {
+  position: absolute;
+  bottom: -28px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}

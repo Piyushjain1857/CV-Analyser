@@ -1,0 +1,117 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String            @id @default(uuid())
+  email             String            @unique
+  password          String
+  name              String
+  role              String            @default("Senior Full-Stack Developer")
+  industry          String            @default("Software & SaaS")
+  experienceLevel   String            @default("Senior (5-8 yrs)")
+  avatarUrl         String?
+  bio               String?           @default("Crafting resilient cloud-native web architectures and optimizing technical portfolios.")
+  targetScore       Int               @default(90)
+  dataRetentionDays Int               @default(90)
+  retainRawText     Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  resumes           Resume[]
+  analyses          Analysis[]
+  analysisHistories AnalysisHistory[]
+  chatMessages      ChatMessage[]
+}
+
+model Resume {
+  id                String            @id @default(uuid())
+  userId            String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title             String
+  candidateName     String
+  fileName          String
+  fileSize          Int               @default(0)
+  fileType          String            @default("application/pdf")
+  rawText           String?
+  status            String            @default("analyzed")
+  targetRole        String
+  targetIndustry    String?           @default("Tech")
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  analyses          Analysis[]
+  analysisHistories AnalysisHistory[]
+  chatMessages      ChatMessage[]
+
+  @@index([userId, createdAt])
+}
+
+model Analysis {
+  id                String            @id @default(uuid())
+  userId            String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId          String
+  resume            Resume            @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  overallScore      Int
+  atsScore          Int
+  keywordScore      Int
+  formatScore       Int
+  skillScore        Int
+  summary           String
+  strengths         String[]
+  weaknesses        String[]
+  missingKeywords   String[]
+  recommendations   String[]
+  rawAnalysisJson   String?
+  createdAt         DateTime          @default(now())
+  analysisHistories AnalysisHistory[]
+  chatMessages      ChatMessage[]
+
+  @@index([userId, createdAt])
+  @@index([resumeId])
+}
+
+model AnalysisHistory {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId    String
+  resume      Resume    @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  analysisId  String?
+  analysis    Analysis? @relation(fields: [analysisId], references: [id], onDelete: SetNull)
+  score       Int
+  actionType  String    @default("INITIAL_SCAN")
+  notes       String?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, createdAt])
+  @@index([resumeId])
+}
+
+model ChatMessage {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId   String?
+  resume     Resume?   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  analysisId String?
+  analysis   Analysis? @relation(fields: [analysisId], references: [id], onDelete: SetNull)
+  role       String    // "user" | "assistant"
+  content    String
+  createdAt  DateTime  @default(now())
+
+  @@index([userId, createdAt])
+  @@index([resumeId])
+}
+
+model SystemMetric {
+  id             String   @id @default(uuid())
+  serviceName    String   @default("cv-insight-core")
+  status         String   @default("healthy")
+  responseTimeMs Int      @default(12)
+  checkedAt      DateTime @default(now())
+}
