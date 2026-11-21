@@ -309,13 +309,13 @@ export async function runGeminiAnalysis({
 
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+  if (process.env.NODE_ENV === 'test' || !apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
     const fallbackResult = runHeuristicFallback({
       resumeText: sanitizedText,
       targetRole,
       targetIndustry,
       jobDescription,
-      reason: 'Gemini API key not configured in environment. Using high-precision built-in ATS engine.',
+      reason: process.env.NODE_ENV === 'test' ? 'Test environment deterministic engine' : 'Gemini API key not configured in environment. Using high-precision built-in ATS engine.',
     });
 
     if (aiAnalysisCache.size >= MAX_CACHE_ENTRIES) {
@@ -646,7 +646,7 @@ export async function improveResumeTextWithGemini({
   const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+  if (process.env.NODE_ENV === 'test' || !apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
     return localImproveResumeText({ type, content, context });
   }
 
@@ -766,7 +766,7 @@ export async function optimizeResumeForJobWithGemini({
   const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+  if (process.env.NODE_ENV === 'test' || !apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
     return localOptimizeResumeForJob({ resumeContent, jobDescription });
   }
 
@@ -903,7 +903,7 @@ export async function generateInterviewQuestionsWithGemini({ targetRole = 'Softw
   const modelName = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+  if (process.env.NODE_ENV === 'test' || !apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
     return localInterviewQuestions({ targetRole, resumeContext });
   }
 
@@ -1019,7 +1019,7 @@ export async function evaluateInterviewAnswerWithGemini({
   const modelName = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+  if (process.env.NODE_ENV === 'test' || !apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
     return localEvaluateInterviewAnswer({ question, questionType, userAnswer, targetRole });
   }
 
@@ -1253,7 +1253,7 @@ export async function generatePersonalizedRoadmapWithGemini({
   const modelName = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+  if (process.env.NODE_ENV === 'test' || !apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
     return localPersonalizedRoadmap({ targetRole, skillGaps, resumeContext });
   }
 

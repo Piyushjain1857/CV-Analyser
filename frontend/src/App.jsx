@@ -14,6 +14,8 @@ import AIResumeBuilder from './pages/AIResumeBuilder';
 import JobMatchPage from './pages/JobMatchPage';
 import AICareerAssistantPage from './pages/AICareerAssistantPage';
 import CareerRoadmapPage from './pages/CareerRoadmapPage';
+import InterviewPrepPage from './pages/InterviewPrepPage';
+import CareerAnalyticsPage from './pages/CareerAnalyticsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { ProtectedRoute, PublicOnlyRoute } from './components/common/ProtectedRoute';
 import './App.css';
@@ -51,6 +53,8 @@ export function App() {
           <Route path="job-match" element={<JobMatchPage />} />
           <Route path="assistant" element={<AICareerAssistantPage />} />
           <Route path="roadmap" element={<CareerRoadmapPage />} />
+          <Route path="interview" element={<InterviewPrepPage />} />
+          <Route path="analytics" element={<CareerAnalyticsPage />} />
           <Route path="results" element={<AnalysisResults />} />
           <Route path="results/:id" element={<AnalysisResults />} />
           <Route path="compare" element={<ComparisonPage />} />

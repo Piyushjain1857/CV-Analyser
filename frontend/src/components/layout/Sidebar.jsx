@@ -17,6 +17,8 @@ import {
   LogOut,
   Sun,
   Moon,
+  HelpCircle,
+  TrendingUp,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -42,6 +44,8 @@ export function Sidebar({ collapsed, setCollapsed }) {
 
   // Secondary analysis views
   const secondaryNavItems = [
+    { to: '/dashboard/interview', label: 'Interview Prep', icon: HelpCircle, pill: 'AI' },
+    { to: '/dashboard/analytics', label: 'Career Analytics', icon: TrendingUp },
     { to: '/dashboard/results', label: 'Analysis Results', icon: FileCheck2 },
     { to: '/dashboard/compare', label: 'Compare Scans', icon: GitCompare },
   ];

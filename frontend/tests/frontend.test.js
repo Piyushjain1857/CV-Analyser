@@ -22,6 +22,8 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
       'JobMatchPage.jsx',
       'AICareerAssistantPage.jsx',
       'CareerRoadmapPage.jsx',
+      'InterviewPrepPage.jsx',
+      'CareerAnalyticsPage.jsx',
     ];
 
     requiredPages.forEach((page) => {
@@ -79,6 +81,15 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
       'improveBuilderText',
       'optimizeBuilderForJob',
       'downloadBuilderPdf',
+      // AI Career Intelligence Platform APIs
+      'getRoadmap',
+      'generateRoadmap',
+      'toggleRoadmapTask',
+      'deleteRoadmap',
+      'getInterviewQuestions',
+      'evaluateInterviewAnswer',
+      'getInterviewHistory',
+      'getCareerAnalytics',
     ];
 
     expectedMethods.forEach((method) => {
@@ -218,5 +229,41 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
     // 7. Selectable Vector PDF Export
     assert.ok(content.includes('handleDownloadPdf'), 'Must provide vector PDF download');
     assert.ok(content.includes('downloadBuilderPdf'), 'Must call downloadBuilderPdf API');
+  });
+
+  test('11. AI Career Intelligence Suite: Job Matching, Roadmap Persistence, Interview Prep & Career Analytics', () => {
+    // 1. Learning Roadmap persistence
+    const roadmapFile = path.join(srcDir, 'pages', 'CareerRoadmapPage.jsx');
+    assert.ok(fs.existsSync(roadmapFile), 'CareerRoadmapPage.jsx must exist');
+    const roadmapContent = fs.readFileSync(roadmapFile, 'utf-8');
+    assert.ok(roadmapContent.includes('toggleRoadmapTask'), 'Must persist task completion to PostgreSQL');
+    assert.ok(roadmapContent.includes('generateRoadmap'), 'Must support generating tailored roadmap');
+    assert.ok(roadmapContent.includes('plan30Day'), 'Must support 30-day plan');
+    assert.ok(roadmapContent.includes('plan60Day'), 'Must support 60-day plan');
+    assert.ok(roadmapContent.includes('plan90Day'), 'Must support 90-day plan');
+
+    // 2. Interview Preparation & Evaluation
+    const interviewFile = path.join(srcDir, 'pages', 'InterviewPrepPage.jsx');
+    assert.ok(fs.existsSync(interviewFile), 'InterviewPrepPage.jsx must exist');
+    const interviewContent = fs.readFileSync(interviewFile, 'utf-8');
+    assert.ok(interviewContent.includes('evaluateInterviewAnswer'), 'Must evaluate answer via Gemini');
+    assert.ok(interviewContent.includes('starEvaluation'), 'Must assess response against STAR framework');
+    assert.ok(interviewContent.includes('disclaimer'), 'Must prominently display non-hiring decision disclaimer');
+
+    // 3. Career Analytics with Real Stored Data
+    const analyticsFile = path.join(srcDir, 'pages', 'CareerAnalyticsPage.jsx');
+    assert.ok(fs.existsSync(analyticsFile), 'CareerAnalyticsPage.jsx must exist');
+    const analyticsContent = fs.readFileSync(analyticsFile, 'utf-8');
+    assert.ok(analyticsContent.includes('getCareerAnalytics'), 'Must fetch real stored analytics');
+    assert.ok(analyticsContent.includes('atsImprovementTrend'), 'Must render longitudinal improvement trend');
+    assert.ok(analyticsContent.includes('roleMatchComparisons'), 'Must render role comparison matrix');
+    assert.ok(analyticsContent.includes('dateRange'), 'Must support timeframe filtering');
+
+    // 4. Advanced Job Matching 3-Tier Gap Analysis
+    const jobMatchFile = path.join(srcDir, 'pages', 'JobMatchPage.jsx');
+    assert.ok(fs.existsSync(jobMatchFile), 'JobMatchPage.jsx must exist');
+    const jobMatchContent = fs.readFileSync(jobMatchFile, 'utf-8');
+    assert.ok(jobMatchContent.includes('matchedSkills'), 'Must display matched skills with evidence');
+    assert.ok(jobMatchContent.includes('missingEvidence'), 'Must display missing evidence without false assumptions');
   });
 });

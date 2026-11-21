@@ -149,9 +149,10 @@ export const api = {
   },
 
   rematchJobDescription: async (resumeId, payload) => {
+    const body = typeof payload === 'string' ? { jobDescription: payload } : payload;
     return fetchJson(`/analysis/${resumeId}/match-jd`, {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     });
   },
 
@@ -326,6 +327,61 @@ export const api = {
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+  },
+
+  // Learning Roadmap APIs (30-60-90 Day Plan)
+  getRoadmap: async () => {
+    return fetchJson('/roadmap');
+  },
+
+  generateRoadmap: async (payload) => {
+    return fetchJson('/roadmap/generate', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  toggleRoadmapTask: async (roadmapId, payload) => {
+    return fetchJson(`/roadmap/${roadmapId}/task`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  deleteRoadmap: async (roadmapId) => {
+    return fetchJson(`/roadmap/${roadmapId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Interview Preparation APIs
+  getInterviewQuestions: async (payload) => {
+    return fetchJson('/interview/questions', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  evaluateInterviewAnswer: async (payload) => {
+    return fetchJson('/interview/evaluate', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  getInterviewHistory: async (targetRole) => {
+    const query = targetRole ? `?targetRole=${encodeURIComponent(targetRole)}` : '';
+    return fetchJson(`/interview/history${query}`);
+  },
+
+  // Career Analytics APIs (Real Stored Data)
+  getCareerAnalytics: async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.resumeId) params.append('resumeId', filters.resumeId);
+    if (filters.targetRole) params.append('targetRole', filters.targetRole);
+    if (filters.dateRange) params.append('dateRange', filters.dateRange);
+    const query = params.toString() ? `?${params.toString()}` : '';
+    return fetchJson(`/analytics${query}`);
   },
 };
 

@@ -44,6 +44,13 @@
   line-height: 1.5;
 }
 
+.roadmap-header-actions-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
 .roadmap-overall-progress {
   width: 260px;
   display: flex;
@@ -66,43 +73,6 @@
 .progress-num {
   font-weight: 700;
   color: var(--primary);
-}
-
-/* Topics Banner */
-.topics-banner-card {
-  padding: 20px;
-}
-
-.topics-banner-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.topics-banner-header h3 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.topics-tags-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.topic-card-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  padding: 7px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-primary);
 }
 
 /* Phases List */
@@ -143,67 +113,70 @@
   width: 44px;
   height: 44px;
   border-radius: var(--radius-md);
-  background: var(--gradient-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
   font-weight: 800;
-  color: #fff;
-  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.phase-num-box.emerald {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.phase-num-box.cyan {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+}
+
+.phase-num-box.purple {
+  background: var(--gradient-primary);
 }
 
 .phase-meta-line {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 2px;
-}
-
-.phase-weeks {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-weight: 600;
+  margin-bottom: 4px;
 }
 
 .phase-tag {
-  font-size: 0.675rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  color: var(--primary);
-  background: var(--primary-light);
-  padding: 1px 6px;
+  padding: 2px 8px;
   border-radius: var(--radius-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .phase-name {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-primary);
+  margin: 0;
 }
 
 .phase-progress-pill {
-  font-size: 0.775rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  padding: 5px 12px;
-  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
 }
 
+/* Tasks */
 .phase-tasks-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .task-row {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -217,41 +190,192 @@
 }
 
 .task-row.done {
-  opacity: 0.75;
-}
-
-.task-row.done .task-text {
-  text-decoration: line-through;
-  color: var(--text-muted);
+  opacity: 0.85;
 }
 
 .task-checkbox {
   background: none;
   border: none;
   padding: 0;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.task-text {
-  font-size: 0.85rem;
-  font-weight: 500;
+.task-content-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.task-header-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-week-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.task-title-text {
+  font-size: 0.9rem;
   color: var(--text-primary);
-  line-height: 1.4;
 }
 
-.text-muted {
+.task-row.done .task-title-text {
+  text-decoration: line-through;
   color: var(--text-muted);
 }
 
-/* Bottom CTA */
-.roadmap-bottom-cta .cta-card {
-  padding: 24px;
-  background: var(--gradient-dark-card);
+.task-objective-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.task-project-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.775rem;
+  color: var(--text-primary);
+  background: rgba(139, 92, 246, 0.08);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-purple);
+  width: fit-content;
+}
+
+.task-milestone-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.775rem;
+  color: var(--text-primary);
+  background: rgba(245, 158, 11, 0.08);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  width: fit-content;
+}
+
+.task-topics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.topic-pill {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+
+/* Modal */
+.roadmap-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 16, 32, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.roadmap-modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 540px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+}
+
+.modal-title-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-title-with-badge h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modal-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-form .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-form label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.modal-form input,
+.modal-form textarea {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-size: 0.825rem;
+}
+
+.modal-form input:focus,
+.modal-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Bottom CTA */
+.roadmap-bottom-cta {
+  margin-top: 10px;
+}
+
+.cta-card {
+  padding: 24px;
 }
 
 .cta-flex {
@@ -263,7 +387,7 @@
 }
 
 .cta-flex h3 {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 4px;
@@ -272,14 +396,21 @@
 .cta-flex p {
   font-size: 0.85rem;
   color: var(--text-secondary);
+  margin: 0;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
+  .roadmap-header-actions-col {
+    align-items: flex-start;
+    width: 100%;
+  }
+
   .roadmap-overall-progress {
     width: 100%;
   }
 
-  .phase-title-left {
-    align-items: flex-start;
+  .task-row {
+    flex-direction: column;
   }
 }

@@ -168,7 +168,10 @@ export const compareAnalyses = async (req, res, next) => {
 export const reanalyzeWithJobDescription = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { jobDescription, targetRole } = req.body;
+    let { jobDescription, targetRole } = req.body || {};
+    if (!jobDescription && typeof req.body === 'string') {
+      jobDescription = req.body;
+    }
 
     if (!jobDescription || jobDescription.trim().length < 20) {
       return res.status(400).json({
@@ -177,12 +180,23 @@ export const reanalyzeWithJobDescription = async (req, res, next) => {
       });
     }
 
-    const resume = await prisma.resume.findFirst({
+    let resume = await prisma.resume.findFirst({
       where: {
         id,
         userId: req.user.id,
       },
     });
+
+    if (!resume) {
+      // Check if id was an analysis ID
+      const analysis = await prisma.analysis.findFirst({
+        where: { id, userId: req.user.id },
+        include: { resume: true },
+      });
+      if (analysis?.resume) {
+        resume = analysis.resume;
+      }
+    }
 
     if (!resume) {
       return res.status(404).json({
