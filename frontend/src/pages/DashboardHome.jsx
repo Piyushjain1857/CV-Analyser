@@ -423,7 +423,7 @@ export function DashboardHome() {
           </Card>
 
           {/* High-Yield Recruiter Keyword Radar */}
-          <Card className="dash-skills-card">
+          {/* <Card className="dash-skills-card">
             <CardHeader
               title="High-Yield Recruiter Keywords"
               subtitle="Industry benchmark competencies for technical roles"
@@ -446,7 +446,7 @@ export function DashboardHome() {
                 </p>
               </div>
             </CardBody>
-          </Card>
+          </Card> */}
         </div>
       </div>
 
