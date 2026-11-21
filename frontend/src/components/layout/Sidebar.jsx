@@ -112,7 +112,7 @@ export function Sidebar({ collapsed, setCollapsed }) {
             );
           })}
 
-          <div className="sidebar-nav-section-title" style={{ marginTop: '12px' }}>
+          <div className="sidebar-nav-section-title" style={{ marginTop: '8px' }}>
             {!collapsed && <span>AUDIT VIEWS</span>}
           </div>
           {secondaryNavItems.map((item) => {
@@ -127,7 +127,7 @@ export function Sidebar({ collapsed, setCollapsed }) {
                 }
                 title={collapsed ? item.label : undefined}
               >
-                <Icon size={17} className="sidebar-nav-icon" />
+                <Icon size={16} className="sidebar-nav-icon" />
                 {!collapsed && (
                   <span className="sidebar-nav-label">{item.label}</span>
                 )}
@@ -140,18 +140,18 @@ export function Sidebar({ collapsed, setCollapsed }) {
         {!collapsed && (
           <div className="sidebar-pro-widget">
             <div className="widget-header">
-              <Zap size={14} className="widget-icon" />
-              <span className="widget-title">Target ATS Index</span>
+              <div className="widget-title-wrap">
+                <Zap size={13} className="widget-icon" />
+                <span className="widget-title">Target ATS Index</span>
+              </div>
+              <span className="widget-meta-pill">
+                <span className="widget-score-num">{user?.targetScore || 90}</span>
+                <span className="widget-score-denom">/100</span>
+                <span className="widget-high">Ready</span>
+              </span>
             </div>
-            <p className="widget-desc">
-              Calibrated for {user?.role || 'Staff Full-Stack Engineer'}.
-            </p>
             <div className="widget-progress">
               <div className="widget-bar" style={{ width: `${user?.targetScore || 90}%` }} />
-            </div>
-            <div className="widget-meta">
-              <span>Benchmark: {user?.targetScore || 90}/100</span>
-              <span className="widget-high">ATS Ready</span>
             </div>
           </div>
         )}
