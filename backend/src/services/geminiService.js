@@ -560,3 +560,282 @@ Feel free to ask me anything specific about your experience, interview prep, or 
     source: 'CV Insight Career Assistant',
   };
 }
+
+
+/**
+ * Local rule-based fallback for AI writing assistant
+ */
+export function localImproveResumeText({ type = 'bullet', content = '', context = {} }) {
+  const clean = (content || '').trim();
+  if (!clean) {
+    return {
+      original: '',
+      improved: '',
+      explanation: 'No content provided to improve.',
+      missingMetricPrompt: null,
+      keywordsAdded: [],
+    };
+  }
+
+  if (type === 'summary') {
+    const role = context.role || context.targetJobTitle || 'Software Engineer';
+    return {
+      original: clean,
+      improved: `Results-driven ${role} with a proven record of designing resilient systems and accelerating team velocity. Proven technical leader in ${clean.replace(/^(I am a|Passionate|Experienced)\s*/i, '')}. Committed to high code quality and measurable engineering outcomes.`,
+      explanation: 'Strengthened seniority positioning, removed passive introductory filler, and sharpened executive technical focus.',
+      missingMetricPrompt: 'What key milestone or scale figure (e.g. 10M daily requests, 40% latency drop, or team of 8) would you like to highlight?',
+      keywordsAdded: ['Resilient Systems', 'Engineering Velocity'],
+    };
+  }
+
+  if (type === 'project') {
+    return {
+      original: clean,
+      improved: `Architected and deployed ${clean.replace(/^(Built a|Created a|This is a)\s*/i, '')}, incorporating automated CI/CD pipelines and optimized data querying.`,
+      explanation: 'Replaced passive descriptions with decisive engineering action verbs and enterprise architectural context.',
+      missingMetricPrompt: 'How many users, requests per second, or data throughput did this project support?',
+      keywordsAdded: ['Architected', 'CI/CD Pipelines'],
+    };
+  }
+
+  // Work experience bullet (Google XYZ formulation)
+  let improvedText = clean;
+  const userMetric = context.userMetric ? ` (${context.userMetric})` : '';
+
+  if (/^(responsible for|worked on|helped with|assisted with|handled)\s+/i.test(clean)) {
+    improvedText = clean.replace(
+      /^(responsible for|worked on|helped with|assisted with|handled)\s+/i,
+      'Spearheaded '
+    );
+  } else if (!/^(spearheaded|architected|engineered|orchestrated|delivered|accelerated|automated|optimized)\b/i.test(clean)) {
+    improvedText = `Engineered and scaled ${clean.charAt(0).toLowerCase() + clean.slice(1)}`;
+  }
+
+  if (userMetric && !improvedText.includes(userMetric)) {
+    improvedText += `, achieving ${context.userMetric}`;
+  } else if (!/\b(\d+%|\$\d+|\d+x|\d+\s*(ms|s|hours|days|engineers|users|services))\b/i.test(improvedText)) {
+    improvedText += ' to optimize operational throughput';
+  }
+
+  return {
+    original: clean,
+    improved: improvedText,
+    explanation: 'Formatted using Google XYZ structure: transformed passive duties into active engineering outcomes.',
+    missingMetricPrompt: context.userMetric
+      ? null
+      : 'What was the quantified impact? (e.g., "reduced latency by 35%", "cut cloud costs by $40K", or "supported 50K MAU")',
+    keywordsAdded: ['Optimized Throughput', 'Engineered'],
+  };
+}
+
+/**
+ * Gemini AI Writing Assistant for Resume Builder
+ */
+export async function improveResumeTextWithGemini({
+  type = 'bullet', // 'bullet' | 'summary' | 'project' | 'general'
+  content = '',
+  context = {},
+}) {
+  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+    return localImproveResumeText({ type, content, context });
+  }
+
+  const sanitizedContent = sanitizeUntrustedResume(content).substring(0, 3000);
+  const ai = new GoogleGenAI({ apiKey });
+
+  const systemInstruction = `You are a Principal Executive Resume Writer and Chief ATS Parsing Architect.
+Your task is to refine and elevate candidate resume content for top tech employers and enterprise ATS platforms.
+
+CRITICAL RULES:
+1. NEVER fabricate employers, credentials, degrees, or skills that the user did not supply.
+2. NEVER invent fake metrics (e.g. do not invent "$10M revenue" or "99.999% uptime" if not provided).
+3. If the user provides a "userMetric", seamlessly incorporate that real user metric into the rewrite.
+4. For work experience bullets, format using Google's XYZ formula: "Accomplished [X], as measured by [Y], by doing [Z]".
+5. If the original text lacks quantified outcomes and no user metric was supplied, formulate a crisp, active-voice sentence and provide a specific question in "missingMetricPrompt" prompting the candidate for their real metric.
+6. Return strictly valid JSON.`;
+
+  const prompt = `Please improve this ${type} content for a ${context.role || 'Software Professional'}.
+Original content:
+"""${sanitizedContent}"""
+
+Context:
+Role: ${context.role || 'Software Engineer'}
+Company: ${context.company || ''}
+Target Title: ${context.targetJobTitle || ''}
+${context.userMetric ? `User-supplied quantified metric to incorporate: "${context.userMetric}"` : ''}
+
+Respond with valid JSON:
+{
+  "original": "${sanitizedContent.replace(/"/g, '\\"')}",
+  "improved": "High-impact, outcome-oriented rewrite here",
+  "explanation": "Why this revision increases ATS ranking & recruiter appeal",
+  "missingMetricPrompt": "Clear question asking for metric if none was provided, or null if already quantified",
+  "keywordsAdded": ["keyword1", "keyword2"]
+}`;
+
+  try {
+    const aiCall = async () => {
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          systemInstruction,
+          responseMimeType: 'application/json',
+          temperature: 0.2,
+        },
+      });
+      return response.text;
+    };
+
+    const rawResponse = await executeWithRetry(aiCall, 2, 20000);
+    const parsed = JSON.parse(rawResponse);
+
+    return {
+      original: content,
+      improved: parsed.improved || content,
+      explanation: parsed.explanation || 'Enhanced with active voice and measurable outcome structure.',
+      missingMetricPrompt: parsed.missingMetricPrompt || null,
+      keywordsAdded: parsed.keywordsAdded || [],
+    };
+  } catch (err) {
+    console.warn('[Gemini improveResumeText error, using fallback]:', err.message);
+    return localImproveResumeText({ type, content, context });
+  }
+}
+
+/**
+ * Local rule-based fallback for Targeted Job Optimization
+ */
+export function localOptimizeResumeForJob({ resumeContent = {}, jobDescription = '' }) {
+  const jdLower = (jobDescription || '').toLowerCase();
+  const allSkills = [
+    ...(resumeContent.skills?.languages || []),
+    ...(resumeContent.skills?.frameworks || []),
+    ...(resumeContent.skills?.databases || []),
+    ...(resumeContent.skills?.tools || []),
+  ];
+
+  const matchedSkills = allSkills.filter((s) => jdLower.includes(String(s).toLowerCase()));
+
+  // Extract common tech keywords present in JD but potentially missing in resume
+  const commonTech = [
+    'Docker', 'Kubernetes', 'AWS', 'PostgreSQL', 'Redis', 'TypeScript', 'GraphQL',
+    'Microservices', 'CI/CD', 'Kafka', 'System Design', 'Terraform', 'Next.js', 'React'
+  ];
+  const missingKeywords = commonTech.filter(
+    (kw) => jdLower.includes(kw.toLowerCase()) && !allSkills.some((s) => String(s).toLowerCase().includes(kw.toLowerCase()))
+  );
+
+  const matchScore = Math.min(95, Math.max(65, Math.round(55 + matchedSkills.length * 5)));
+
+  const targetTitle = resumeContent.personalInfo?.targetTitle || 'Staff Software Engineer';
+
+  const roleSpecificSummary = `${targetTitle} with proven expertise in ${matchedSkills.slice(0, 4).join(', ') || 'distributed systems and scalable web architecture'}. Track record of accelerating delivery velocity, optimizing data structures, and delivering high-availability cloud solutions aligned with modern engineering requirements.`;
+
+  return {
+    jobMatchScore: matchScore,
+    keywordCoverage: Math.min(100, Math.round((matchedSkills.length / Math.max(1, matchedSkills.length + missingKeywords.length)) * 100)),
+    relevantExistingSkills: matchedSkills,
+    highPriorityKeywordsToHighlight: missingKeywords.slice(0, 6),
+    roleSpecificSummary,
+    bulletImprovementSuggestions: [
+      `Emphasize hands-on experience with ${matchedSkills.slice(0, 2).join(' and ') || 'core stack'} in your most recent role.`,
+      `If you have familiarity with ${missingKeywords.slice(0, 2).join(' or ') || 'cloud deployment'}, incorporate those keywords explicitly under Technical Skills.`,
+      'Quantify throughput, latency, or user impact on key backend services.',
+    ],
+  };
+}
+
+/**
+ * Gemini Targeted Resume Optimization against a Job Description
+ */
+export async function optimizeResumeForJobWithGemini({
+  resumeContent = {},
+  jobDescription = '',
+}) {
+  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+    return localOptimizeResumeForJob({ resumeContent, jobDescription });
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  const sanitizedJd = sanitizeUntrustedResume(jobDescription).substring(0, 6000);
+
+  const resumeSummary = {
+    title: resumeContent.personalInfo?.targetTitle,
+    summary: resumeContent.summary,
+    skills: resumeContent.skills,
+    experienceRoles: (resumeContent.experiences || []).map((e) => ({
+      role: e.role,
+      company: e.company,
+      bullets: e.bullets,
+    })),
+  };
+
+  const systemInstruction = `You are a Principal Technical Recruiter and Career Optimization AI.
+Your task is to analyze candidate resume content against a real job description.
+
+CRITICAL RULES:
+1. NEVER invent qualifications, certifications, or employers that the candidate did not have.
+2. Match existing skills and identify relevant keywords from the JD that candidate's experience justifies.
+3. Generate a role-specific professional summary using ONLY verified user-provided information.
+4. Output strictly valid JSON.`;
+
+  const prompt = `Compare this resume against the Target Job Description:
+
+<untrusted_job_description>
+${sanitizedJd}
+</untrusted_job_description>
+
+<untrusted_candidate_resume>
+${JSON.stringify(resumeSummary, null, 2).substring(0, 10000)}
+</untrusted_candidate_resume>
+
+Respond with valid JSON:
+{
+  "jobMatchScore": 85,
+  "keywordCoverage": 82,
+  "relevantExistingSkills": ["Skill 1", "Skill 2"],
+  "highPriorityKeywordsToHighlight": ["Keyword 1", "Keyword 2"],
+  "roleSpecificSummary": "Tailored summary strictly using candidate's verified background",
+  "bulletImprovementSuggestions": [
+    "Specific suggestion 1",
+    "Specific suggestion 2"
+  ]
+}`;
+
+  try {
+    const aiCall = async () => {
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          systemInstruction,
+          responseMimeType: 'application/json',
+          temperature: 0.2,
+        },
+      });
+      return response.text;
+    };
+
+    const rawResponse = await executeWithRetry(aiCall, 2, 25000);
+    const parsed = JSON.parse(rawResponse);
+
+    return {
+      jobMatchScore: typeof parsed.jobMatchScore === 'number' ? parsed.jobMatchScore : 84,
+      keywordCoverage: typeof parsed.keywordCoverage === 'number' ? parsed.keywordCoverage : 80,
+      relevantExistingSkills: Array.isArray(parsed.relevantExistingSkills) ? parsed.relevantExistingSkills : [],
+      highPriorityKeywordsToHighlight: Array.isArray(parsed.highPriorityKeywordsToHighlight) ? parsed.highPriorityKeywordsToHighlight : [],
+      roleSpecificSummary: parsed.roleSpecificSummary || resumeContent.summary,
+      bulletImprovementSuggestions: Array.isArray(parsed.bulletImprovementSuggestions) ? parsed.bulletImprovementSuggestions : [],
+    };
+  } catch (err) {
+    console.warn('[Gemini optimizeResumeForJob error, using fallback]:', err.message);
+    return localOptimizeResumeForJob({ resumeContent, jobDescription });
+  }
+}

@@ -6,6 +6,7 @@ import analysisRoutes from './analysisRoutes.js';
 import profileRoutes from './profileRoutes.js';
 import statsRoutes from './statsRoutes.js';
 import chatRoutes from './chatRoutes.js';
+import builderRoutes from './builderRoutes.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -20,5 +21,6 @@ router.use('/analysis', protect, analysisRoutes);
 router.use('/profile', protect, profileRoutes);
 router.use('/stats', protect, statsRoutes);
 router.use('/chat', protect, chatRoutes);
+router.use('/builder', protect, builderRoutes);
 
 export default router;

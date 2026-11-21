@@ -220,6 +220,113 @@ export const api = {
       method: 'DELETE',
     });
   },
+
+  // Generative AI Resume Builder & Optimizer
+  getBuilderResumes: async () => {
+    return fetchJson('/builder');
+  },
+
+  getBuilderResume: async (id) => {
+    return fetchJson(`/builder/${id}`);
+  },
+
+  createBuilderResume: async (data = {}) => {
+    return fetchJson('/builder', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  importBuilderResume: async (resumeId) => {
+    return fetchJson(`/builder/import/${resumeId}`, {
+      method: 'POST',
+    });
+  },
+
+  updateBuilderResume: async (id, data) => {
+    return fetchJson(`/builder/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  autosaveBuilderResume: async (id, data) => {
+    return fetchJson(`/builder/${id}/autosave`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  duplicateBuilderResume: async (id) => {
+    return fetchJson(`/builder/${id}/duplicate`, {
+      method: 'POST',
+    });
+  },
+
+  deleteBuilderResume: async (id) => {
+    return fetchJson(`/builder/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  saveBuilderVersion: async (id, versionName) => {
+    return fetchJson(`/builder/${id}/version`, {
+      method: 'POST',
+      body: JSON.stringify({ versionName }),
+    });
+  },
+
+  getBuilderVersions: async (id) => {
+    return fetchJson(`/builder/${id}/versions`);
+  },
+
+  restoreBuilderVersion: async (id, versionId) => {
+    return fetchJson(`/builder/${id}/restore/${versionId}`, {
+      method: 'POST',
+    });
+  },
+
+  improveBuilderText: async (payload) => {
+    return fetchJson('/builder/ai/improve-text', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  optimizeBuilderForJob: async (payload) => {
+    return fetchJson('/builder/ai/optimize-for-job', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  downloadBuilderPdf: async (id, options = {}) => {
+    const params = new URLSearchParams();
+    if (options.template) params.append('template', options.template);
+    if (options.fontFamily) params.append('fontFamily', options.fontFamily);
+    if (options.fontSize) params.append('fontSize', options.fontSize);
+    if (options.accentColor) params.append('accentColor', options.accentColor);
+
+    const queryString = params.toString() ? `?${params.toString()}` : '';
+    const response = await fetch(`${API_BASE}/builder/${id}/export/pdf${queryString}`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.message || `Failed to download PDF (${response.status})`);
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = options.fileName || `Resume_${Date.now()}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  },
 };
 
 export default api;

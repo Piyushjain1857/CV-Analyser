@@ -35,7 +35,7 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
     });
   });
 
-  test('2. API Service exports all required backend communication methods', async () => {
+  test('2. API Service exports all required backend communication methods including Prompt 9 Builder APIs', async () => {
     const apiFile = path.join(srcDir, 'services', 'api.js');
     assert.ok(fs.existsSync(apiFile), 'api.js must exist');
     const content = fs.readFileSync(apiFile, 'utf-8');
@@ -64,6 +64,21 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
       'sendChatMessage',
       'getChatHistory',
       'clearChatHistory',
+      // Prompt 9 Generative AI Resume Builder & Optimizer APIs
+      'getBuilderResumes',
+      'getBuilderResume',
+      'createBuilderResume',
+      'importBuilderResume',
+      'updateBuilderResume',
+      'autosaveBuilderResume',
+      'duplicateBuilderResume',
+      'deleteBuilderResume',
+      'saveBuilderVersion',
+      'getBuilderVersions',
+      'restoreBuilderVersion',
+      'improveBuilderText',
+      'optimizeBuilderForJob',
+      'downloadBuilderPdf',
     ];
 
     expectedMethods.forEach((method) => {
@@ -126,17 +141,17 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
     assert.ok(content.includes('starFrameworkGuidance'), 'Must render starFrameworkGuidance');
   });
 
-  test('7. Prompt 8: AI Resume Builder provides split-screen editor, templates and export actions', () => {
+  test('7. Prompt 8 & 9: AI Resume Builder provides split-screen editor, templates and export actions', () => {
     const builderFile = path.join(srcDir, 'pages', 'AIResumeBuilder.jsx');
     assert.ok(fs.existsSync(builderFile), 'AIResumeBuilder.jsx must exist');
     const content = fs.readFileSync(builderFile, 'utf-8');
 
-    assert.ok(content.includes('handlePrint'), 'Must provide print/PDF export');
-    assert.ok(content.includes('handleCopyText'), 'Must provide copy text action');
-    assert.ok(content.includes('applyXyzTransform'), 'Must support Google XYZ transform');
-    assert.ok(content.includes('template-modern') || content.includes("'modern'"), 'Must support Modern Tech template');
-    assert.ok(content.includes("'executive'"), 'Must support Executive template');
-    assert.ok(content.includes("'minimalist'"), 'Must support Minimalist template');
+    assert.ok(content.includes('handlePrint') || content.includes('window.print()'), 'Must provide print/PDF export');
+    assert.ok(content.includes('handleCopyFormattedText') || content.includes('handleCopyText'), 'Must provide copy text action');
+    assert.ok(content.includes('applyXyzTransform') || content.includes('openAiAssistant'), 'Must support Google XYZ transform');
+    assert.ok(content.includes('classic-professional'), 'Must support Classic Professional template');
+    assert.ok(content.includes('modern-minimal'), 'Must support Modern Minimal template');
+    assert.ok(content.includes('technical-developer'), 'Must support Technical Developer template');
   });
 
   test('8. Prompt 8: Sidebar navigation provides all 8 core SaaS application items', () => {
@@ -162,5 +177,46 @@ describe('Frontend Architecture, Components & API Contract Suite', () => {
     assert.ok(content.includes('faqs'), 'Must render interactive FAQs');
     assert.ok(content.includes('privacy'), 'Must include Privacy & Security section');
     assert.ok(!content.includes('14,200+'), 'Must not display fabricated statistics');
+  });
+
+  test('10. Prompt 9: AI Resume Builder & Optimizer comprehensive feature suite', () => {
+    const builderFile = path.join(srcDir, 'pages', 'AIResumeBuilder.jsx');
+    assert.ok(fs.existsSync(builderFile), 'AIResumeBuilder.jsx must exist');
+    const content = fs.readFileSync(builderFile, 'utf-8');
+
+    // 1. PostgreSQL Persistence & 1.5s debounced autosave
+    assert.ok(content.includes('triggerDebouncedAutosave'), 'Must implement debounced autosave');
+    assert.ok(content.includes('autosaveBuilderResume'), 'Must call autosaveBuilderResume API');
+    assert.ok(content.includes('isDraft'), 'Must track draft status');
+
+    // 2. Import from existing uploaded resume
+    assert.ok(content.includes('handleImportResume'), 'Must support importing from uploaded resume');
+    assert.ok(content.includes('importBuilderResume'), 'Must call importBuilderResume API');
+
+    // 3. Section and Entry Reordering
+    assert.ok(content.includes('moveSection'), 'Must provide section reordering helper');
+    assert.ok(content.includes('moveEntry'), 'Must provide entry reordering helper');
+    assert.ok(content.includes('deleteEntry'), 'Must provide entry deletion helper');
+
+    // 4. Version Snapshots & Restore
+    assert.ok(content.includes('handleSaveVersionSnapshot'), 'Must allow saving named version snapshots');
+    assert.ok(content.includes('handleRestoreVersion'), 'Must allow restoring earlier snapshots');
+    assert.ok(content.includes('handleDuplicate'), 'Must allow duplicating resumes');
+
+    // 5. Gemini AI Writing Assistant & Anti-fabrication safeguards
+    assert.ok(content.includes('openAiAssistant'), 'Must provide AI Writing Assistant modal');
+    assert.ok(content.includes('anti-fab-badge') || content.includes('Anti-Fabrication'), 'Must enforce anti-fabrication badge');
+    assert.ok(content.includes('missingMetricPrompt'), 'Must prompt user for missing metrics');
+    assert.ok(content.includes('handleAcceptAiText'), 'Must support Accept AI rewrite');
+
+    // 6. Targeted Job Description Optimization
+    assert.ok(content.includes('handleRunJobOptimization'), 'Must support targeted job optimization');
+    assert.ok(content.includes('optimizeBuilderForJob'), 'Must call optimizeBuilderForJob API');
+    assert.ok(content.includes('roleSpecificSummary') || content.includes('handleApplyTailoredSummary'), 'Must support applying role-specific summary');
+    assert.ok(content.includes('handleAddSuggestedKeywords'), 'Must support 1-click apply suggested keywords');
+
+    // 7. Selectable Vector PDF Export
+    assert.ok(content.includes('handleDownloadPdf'), 'Must provide vector PDF download');
+    assert.ok(content.includes('downloadBuilderPdf'), 'Must call downloadBuilderPdf API');
   });
 });
