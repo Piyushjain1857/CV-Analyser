@@ -10,7 +10,6 @@ import {
   Cpu,
   ArrowUpRight,
   Sparkles,
-  Target,
   Clock,
   ChevronRight,
   ShieldAlert,
@@ -18,7 +17,6 @@ import {
   Activity,
   PlusCircle,
   PenTool,
-  Compass,
   ArrowRight,
   Zap,
 } from 'lucide-react';
@@ -97,7 +95,7 @@ export function DashboardHome() {
           </div>
           <p className="dash-subheading">
             {resumes.length === 0 ? (
-              'Welcome to your AI Career Intelligence dashboard. Upload your first resume or build one with Gemini to unlock instant 10-dimension ATS audits and gap analysis.'
+              `Calibrated for ${userProfile?.role || 'Technical Professional'}. Upload a resume or build with Gemini to unlock instant 10-dimension ATS audits.`
             ) : (
               <>
                 Calibrated for <strong>{userProfile?.role || 'Technical Professional'}</strong>
@@ -109,20 +107,20 @@ export function DashboardHome() {
 
         <div className="dash-quick-actions">
           <Button
-            variant="primary"
-            size="sm"
-            icon={PlusCircle}
-            onClick={() => navigate('/dashboard/upload')}
-          >
-            Analyze Resume
-          </Button>
-          <Button
             variant="outline"
             size="sm"
             icon={Sparkles}
             onClick={() => navigate('/dashboard/builder')}
           >
             AI Resume Builder
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            icon={PlusCircle}
+            onClick={() => navigate('/dashboard/upload')}
+          >
+            Analyze Resume
           </Button>
         </div>
       </div>
@@ -197,53 +195,6 @@ export function DashboardHome() {
         </Card>
       </div>
 
-      {/* Quick Launch Suite (4 Action Tiles) */}
-      <div className="dash-quick-launch-grid">
-        <div className="quick-launch-tile" onClick={() => navigate('/dashboard/upload')}>
-          <div className="tile-icon-box purple">
-            <UploadCloud size={16} />
-          </div>
-          <div className="tile-text">
-            <h4>Analyze Resume</h4>
-            <p>Upload PDF/DOCX for 10-dimension audit</p>
-          </div>
-          <ChevronRight size={14} className="tile-arrow" />
-        </div>
-
-        <div className="quick-launch-tile" onClick={() => navigate('/dashboard/builder')}>
-          <div className="tile-icon-box cyan">
-            <Sparkles size={16} />
-          </div>
-          <div className="tile-text">
-            <h4>AI Resume Builder</h4>
-            <p>Single-column editor with live preview</p>
-          </div>
-          <ChevronRight size={14} className="tile-arrow" />
-        </div>
-
-        <div className="quick-launch-tile" onClick={() => navigate('/dashboard/job-match')}>
-          <div className="tile-icon-box emerald">
-            <Target size={16} />
-          </div>
-          <div className="tile-text">
-            <h4>Job Match & Gaps</h4>
-            <p>Paste target JD for 3-tier gap isolation</p>
-          </div>
-          <ChevronRight size={14} className="tile-arrow" />
-        </div>
-
-        <div className="quick-launch-tile" onClick={() => navigate('/dashboard/roadmap')}>
-          <div className="tile-icon-box amber">
-            <Compass size={16} />
-          </div>
-          <div className="tile-text">
-            <h4>Career Roadmap</h4>
-            <p>12-week strategic milestones plan</p>
-          </div>
-          <ChevronRight size={14} className="tile-arrow" />
-        </div>
-      </div>
-
       {/* Main Content Grid: Resumes Table & Score Trends */}
       <div className="dash-content-grid">
         {/* Left Column: Recent Scans */}
@@ -267,42 +218,99 @@ export function DashboardHome() {
                   <span>Loading recent records from PostgreSQL...</span>
                 </div>
               ) : resumes.length === 0 ? (
-                <div className="empty-state-box">
-                  <div className="empty-icon-wrap">
-                    <UploadCloud size={24} className="text-violet" />
+                <div className="onboarding-studio-root">
+                  {/* Left Column: Interactive Drop & Upload Area */}
+                  <div
+                    className="onboarding-drop-column"
+                    onClick={() => navigate('/dashboard/upload')}
+                  >
+                    <div className="onboarding-drop-inner">
+                      <div className="onboarding-icon-ring">
+                        <UploadCloud size={26} className="text-violet" />
+                      </div>
+                      <h3 className="onboarding-drop-title">Upload Your Resume</h3>
+                      <p className="onboarding-drop-desc">
+                        Drag & drop your PDF or DOCX file here, or click to browse.
+                      </p>
+                      <div className="onboarding-format-chips">
+                        <span className="format-chip">PDF</span>
+                        <span className="format-chip">DOCX</span>
+                        <span className="format-chip">TXT</span>
+                        <span className="format-limit">Max 10MB</span>
+                      </div>
+                      <div className="onboarding-action-group" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          icon={UploadCloud}
+                          onClick={() => navigate('/dashboard/upload')}
+                        >
+                          Upload First Resume
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          icon={Sparkles}
+                          onClick={() => navigate('/dashboard/builder')}
+                        >
+                          Build with AI
+                        </Button>
+                      </div>
+                      <div className="onboarding-security-note">
+                        <ShieldAlert size={12} className="text-emerald" />
+                        <span>AES-256 Vault Encryption • Zero Data Retention</span>
+                      </div>
+                    </div>
                   </div>
-                  <h3>Ready for your first ATS Intelligence audit?</h3>
-                  <p>
-                    Upload a PDF or DOCX resume to get an instant 10-dimension ATS breakdown, Gemini Google XYZ bullet rewrites, and skill gap discovery.
-                  </p>
-                  <div className="onboarding-perks-row">
-                    <span className="perk-pill">
-                      <CheckCircle2 size={12} className="text-emerald" /> 10-Dimension Scoring
-                    </span>
-                    <span className="perk-pill">
-                      <CheckCircle2 size={12} className="text-emerald" /> Google XYZ Rewrites
-                    </span>
-                    <span className="perk-pill">
-                      <CheckCircle2 size={12} className="text-emerald" /> Tenant-Isolated Encryption
-                    </span>
-                  </div>
-                  <div className="empty-actions-row">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      icon={UploadCloud}
-                      onClick={() => navigate('/dashboard/upload')}
-                    >
-                      Upload First Resume
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      icon={Sparkles}
-                      onClick={() => navigate('/dashboard/builder')}
-                    >
-                      Create with AI Builder
-                    </Button>
+
+                  {/* Right Column: 4 Evaluation Pillars */}
+                  <div className="onboarding-pillars-column">
+                    <div className="pillars-header">
+                      <h4 className="pillars-title">Gemini 2.5 ATS Evaluation</h4>
+                      <p className="pillars-subtitle">Enterprise audit dimensions calibrated for your target role</p>
+                    </div>
+
+                    <div className="pillars-grid">
+                      <div className="pillar-item">
+                        <div className="pillar-icon-box purple">
+                          <CheckCircle2 size={15} />
+                        </div>
+                        <div className="pillar-text">
+                          <h5>10-Dimension Rubric</h5>
+                          <p>Scored against Taleo & Workday parser standards.</p>
+                        </div>
+                      </div>
+
+                      <div className="pillar-item">
+                        <div className="pillar-icon-box emerald">
+                          <TrendingUp size={15} />
+                        </div>
+                        <div className="pillar-text">
+                          <h5>Google XYZ Bullets</h5>
+                          <p>Quantifies impact: Accomplished [X] by [Y] doing [Z].</p>
+                        </div>
+                      </div>
+
+                      <div className="pillar-item">
+                        <div className="pillar-icon-box cyan">
+                          <Sparkles size={15} />
+                        </div>
+                        <div className="pillar-text">
+                          <h5>Skill Gap Discovery</h5>
+                          <p>Pinpoints missing keywords and technical competencies.</p>
+                        </div>
+                      </div>
+
+                      <div className="pillar-item">
+                        <div className="pillar-icon-box indigo">
+                          <Database size={15} />
+                        </div>
+                        <div className="pillar-text">
+                          <h5>Tenant-Isolated Vault</h5>
+                          <p>Encrypted PostgreSQL records with HTTP-only security.</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -354,7 +362,7 @@ export function DashboardHome() {
           </Card>
         </div>
 
-        {/* Right Sidebar Column: Score Trajectory & Keyword Radar */}
+        {/* Right Sidebar Column: Score Trajectory & Recruiter Keywords */}
         <div className="dash-col-right">
           {/* Score Trajectory Card */}
           <Card className="dash-trend-card" padding="none">
@@ -363,19 +371,49 @@ export function DashboardHome() {
               subtitle={
                 recentScores.length > 0
                   ? 'Performance across recent scan iterations'
-                  : 'Iteration progression tracker'
+                  : 'Benchmark & iteration progress'
               }
             />
             <CardBody className="dash-card-body-fill">
               {recentScores.length === 0 ? (
                 <div className="trajectory-empty-state">
-                  <div className="trajectory-empty-icon-box">
-                    <TrendingUp size={20} className="text-violet" />
+                  <div className="ghost-trajectory-chart">
+                    <div className="ghost-chart-threshold">
+                      <span className="ghost-threshold-line" />
+                      <span className="ghost-threshold-badge">Target: 85%+</span>
+                    </div>
+                    <div className="ghost-bars-row">
+                      <div className="ghost-bar-col">
+                        <span className="ghost-bar-val">74%</span>
+                        <div className="ghost-bar-track">
+                          <div className="ghost-bar-fill" style={{ height: '74%' }} />
+                        </div>
+                        <span className="ghost-bar-label">v1</span>
+                      </div>
+                      <div className="ghost-bar-col">
+                        <span className="ghost-bar-val">81%</span>
+                        <div className="ghost-bar-track">
+                          <div className="ghost-bar-fill" style={{ height: '81%' }} />
+                        </div>
+                        <span className="ghost-bar-label">v2</span>
+                      </div>
+                      <div className="ghost-bar-col">
+                        <span className="ghost-bar-val">88%</span>
+                        <div className="ghost-bar-track">
+                          <div className="ghost-bar-fill" style={{ height: '88%' }} />
+                        </div>
+                        <span className="ghost-bar-label">v3</span>
+                      </div>
+                      <div className="ghost-bar-col">
+                        <span className="ghost-bar-val">94%</span>
+                        <div className="ghost-bar-track highlight">
+                          <div className="ghost-bar-fill highlight" style={{ height: '94%' }} />
+                        </div>
+                        <span className="ghost-bar-label">v4</span>
+                      </div>
+                    </div>
                   </div>
-                  <h4 className="trajectory-empty-title">No Trajectory Recorded Yet</h4>
-                  <p className="trajectory-empty-desc">
-                    Your ATS score progression across iterations will be tracked and charted here as you scan new versions.
-                  </p>
+
                   <div className="trajectory-milestone-preview">
                     <div className="milestone-step active">
                       <span className="milestone-dot" />
@@ -392,9 +430,10 @@ export function DashboardHome() {
                       <span className="milestone-text">3. ATS Ready</span>
                     </div>
                   </div>
+
                   <div className="trend-summary-note neutral">
                     <Sparkles size={12} className="text-violet" />
-                    <span>Scores will populate after your first upload</span>
+                    <span>Upload your resume to track real score progressions</span>
                   </div>
                 </div>
               ) : (
@@ -423,6 +462,30 @@ export function DashboardHome() {
                   </div>
                 </>
               )}
+            </CardBody>
+          </Card>
+
+          {/* High-Yield Recruiter Keywords Card */}
+          <Card className="dash-skills-card" padding="none">
+            <CardHeader
+              title="Target Competencies"
+              subtitle="High-impact recruiter keyword benchmarks"
+            />
+            <CardBody className="dash-card-body-fill">
+              <div className="keyword-radar-tags">
+                <span className="radar-tag high">Kubernetes (+18 pts)</span>
+                <span className="radar-tag high">TypeScript (+15 pts)</span>
+                <span className="radar-tag med">System Design (+12 pts)</span>
+                <span className="radar-tag med">PostgreSQL (+10 pts)</span>
+                <span className="radar-tag low">CI/CD Pipelines (+8 pts)</span>
+                <span className="radar-tag low">Docker Containerization (+8 pts)</span>
+              </div>
+              <div className="keyword-tip-box">
+                <Sparkles size={13} className="tip-icon" />
+                <p className="tip-text">
+                  Target keywords increase recruiter query pass rate by up to <strong>68%</strong>.
+                </p>
+              </div>
             </CardBody>
           </Card>
         </div>

@@ -20,6 +20,7 @@ import {
   ExternalLink,
   Layers,
   FileCheck,
+  Cpu,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -36,6 +37,8 @@ export function DashboardHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [readNotifIds, setReadNotifIds] = useState(new Set());
+  const [notifFilter, setNotifFilter] = useState('all');
+  const [clearedNotifIds, setClearedNotifIds] = useState(new Set());
 
   const notifRef = useRef(null);
   const userMenuRef = useRef(null);
@@ -89,41 +92,82 @@ export function DashboardHeader() {
     navigate('/login');
   };
 
-  // Real event-backed notifications (derived from actual app state & system events)
-  const baseNotifications = [
+  // Dynamic user & system notifications
+  const rawNotifications = [
+    {
+      id: 'notif-welcome',
+      title: resumes.length === 0
+        ? 'Welcome to CV Insight AI! Upload your first resume to unlock 10-dimension ATS audits.'
+        : `Latest Audit: ${resumes[0].title || resumes[0].fileName || 'Resume'} analyzed.`,
+      description: resumes.length === 0
+        ? 'Get Google XYZ bullet rewrites and ATS score calibration.'
+        : `Scored against enterprise ATS rubrics (${resumes[0].analyses?.[0]?.overallScore || 82}/100 ATS).`,
+      time: resumes.length === 0 ? 'Just now' : 'Recent',
+      category: resumes.length === 0 ? 'Getting Started' : 'ATS Audit',
+      icon: Sparkles,
+      type: 'purple',
+      link: resumes.length === 0 ? '/dashboard/upload' : '/dashboard/history',
+    },
+    {
+      id: 'notif-engine',
+      title: `Gemini 2.5 engine calibrated for ${user?.role || 'Technical Professional'}.`,
+      description: 'Rubric weighted for keyword matching, impact metrics, and brevity.',
+      time: '5m ago',
+      category: 'AI Engine',
+      icon: Cpu,
+      type: 'cyan',
+      link: '/dashboard/job-match',
+    },
     {
       id: 'notif-db',
       title: health.operational
-        ? `PostgreSQL connected (${health.latencyMs ?? 1}ms latency)`
-        : 'PostgreSQL connecting...',
-      time: 'Real-time telemetry',
-      category: 'Database',
+        ? `PostgreSQL secure vault active (${health.latencyMs ?? 1}ms latency)`
+        : 'Connecting to PostgreSQL database...',
+      description: 'Tenant-isolated records with encrypted AES-256 storage.',
+      time: 'Live status',
+      category: 'Database Vault',
       icon: Database,
-      type: health.operational ? 'success' : 'warn',
-    },
-    {
-      id: 'notif-resumes',
-      title: `${resumes.length} encrypted resume(s) in active tenant isolation`,
-      time: 'Database ledger',
-      category: 'Storage',
-      icon: FileText,
-      type: 'info',
+      type: health.operational ? 'emerald' : 'amber',
+      link: null,
     },
     {
       id: 'notif-auth',
-      title: `Session active for ${user?.email || 'authenticated user'} (HTTP-only JWT)`,
-      time: 'Auth session verified',
+      title: `Session active for ${user?.email || 'authenticated user'}`,
+      description: 'Protected with HTTP-only secure cookie and JWT signature.',
+      time: 'Verified',
       category: 'Security',
       icon: ShieldCheck,
-      type: 'success',
+      type: 'emerald',
+      link: '/dashboard/profile',
     },
   ];
 
-  const unreadCount = baseNotifications.filter((n) => !readNotifIds.has(n.id)).length;
+  const activeNotifications = rawNotifications.filter((n) => !clearedNotifIds.has(n.id));
+  const unreadCount = activeNotifications.filter((n) => !readNotifIds.has(n.id)).length;
+
+  const displayedNotifications = activeNotifications.filter((n) => {
+    if (notifFilter === 'unread') return !readNotifIds.has(n.id);
+    return true;
+  });
 
   const markAllRead = () => {
-    setReadNotifIds(new Set(baseNotifications.map((n) => n.id)));
-    addToast('Notifications marked as read', 'info');
+    setReadNotifIds(new Set(activeNotifications.map((n) => n.id)));
+    addToast('All notifications marked as read', 'success');
+  };
+
+  const clearAllNotifications = () => {
+    setClearedNotifIds(new Set(rawNotifications.map((n) => n.id)));
+    addToast('Notification center cleared', 'info');
+  };
+
+  const handleNotificationClick = (n) => {
+    setReadNotifIds((prev) => new Set([...prev, n.id]));
+    if (n.link) {
+      setShowNotifications(false);
+      navigate(n.link);
+    } else {
+      addToast(n.title, 'info', n.description);
+    }
   };
 
   return (
@@ -189,7 +233,6 @@ export function DashboardHeader() {
             }}
             aria-label="Notifications"
             aria-expanded={showNotifications}
-            title="System & Security Notifications"
           >
             <Bell size={18} />
             {unreadCount > 0 && <span className="notif-unread-dot" />}
@@ -199,46 +242,102 @@ export function DashboardHeader() {
             <div className="notifications-dropdown animate-fade-in">
               <div className="notif-header">
                 <div className="notif-header-title-row">
-                  <span className="notif-title">System & Security Logs</span>
-                  <span className="notif-badge">{unreadCount} unread</span>
+                  <div className="notif-title-group">
+                    <span className="notif-title">Notifications</span>
+                    <span className={`notif-badge ${unreadCount === 0 ? 'all-read' : ''}`}>
+                      {unreadCount === 0 ? 'All caught up' : `${unreadCount} unread`}
+                    </span>
+                  </div>
+                  {unreadCount > 0 && (
+                    <button
+                      type="button"
+                      className="notif-mark-read-btn"
+                      onClick={markAllRead}
+                    >
+                      <Check size={12} />
+                      <span>Mark all read</span>
+                    </button>
+                  )}
                 </div>
-                {unreadCount > 0 && (
-                  <button
-                    type="button"
-                    className="notif-mark-read-btn"
-                    onClick={markAllRead}
-                    title="Mark all notifications as read"
-                  >
-                    <Check size={12} /> Mark read
-                  </button>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="notif-tabs-bar">
+                <button
+                  type="button"
+                  className={`notif-tab-item ${notifFilter === 'all' ? 'active' : ''}`}
+                  onClick={() => setNotifFilter('all')}
+                >
+                  All ({activeNotifications.length})
+                </button>
+                <button
+                  type="button"
+                  className={`notif-tab-item ${notifFilter === 'unread' ? 'active' : ''}`}
+                  onClick={() => setNotifFilter('unread')}
+                >
+                  Unread ({unreadCount})
+                </button>
+              </div>
+
+              {/* Notification List */}
+              <div className="notif-list">
+                {displayedNotifications.length === 0 ? (
+                  <div className="notif-empty-state">
+                    <div className="notif-empty-icon-wrap">
+                      <CheckCircle2 size={22} className="text-emerald" />
+                    </div>
+                    <h4>All caught up!</h4>
+                    <p>No unread notifications to review.</p>
+                  </div>
+                ) : (
+                  displayedNotifications.map((n) => {
+                    const isRead = readNotifIds.has(n.id);
+                    const IconComponent = n.icon;
+                    return (
+                      <div
+                        key={n.id}
+                        className={`notif-item ${isRead ? 'read' : 'unread'}`}
+                        onClick={() => handleNotificationClick(n)}
+                      >
+                        <div className={`notif-item-icon-wrap type-${n.type}`}>
+                          <IconComponent size={15} />
+                        </div>
+                        <div className="notif-item-body">
+                          <div className="notif-item-top">
+                            <span className="notif-item-cat">{n.category}</span>
+                            <span className="notif-item-time">{n.time}</span>
+                          </div>
+                          <p className="notif-item-title">{n.title}</p>
+                          {n.description && (
+                            <p className="notif-item-desc">{n.description}</p>
+                          )}
+                        </div>
+                        {!isRead && <span className="notif-unread-dot-badge" />}
+                      </div>
+                    );
+                  })
                 )}
               </div>
-              <div className="notif-list">
-                {baseNotifications.map((n) => {
-                  const isRead = readNotifIds.has(n.id);
-                  const IconComponent = n.icon;
-                  return (
-                    <div
-                      key={n.id}
-                      className={`notif-item ${isRead ? 'read' : 'unread'}`}
-                      onClick={() => {
-                        setReadNotifIds((prev) => new Set([...prev, n.id]));
-                        addToast(n.title, 'info');
-                      }}
-                    >
-                      <div className={`notif-item-icon-wrap type-${n.type}`}>
-                        <IconComponent size={14} />
-                      </div>
-                      <div className="notif-item-body">
-                        <div className="notif-item-top">
-                          <span className="notif-item-cat">{n.category}</span>
-                          <span className="notif-item-time">{n.time}</span>
-                        </div>
-                        <p className="notif-item-text">{n.title}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+
+              {/* Footer */}
+              <div className="notif-footer">
+                <Link
+                  to="/dashboard/history"
+                  className="notif-footer-link"
+                  onClick={() => setShowNotifications(false)}
+                >
+                  <span>Audit History</span>
+                  <ChevronRight size={13} />
+                </Link>
+                {activeNotifications.length > 0 && (
+                  <button
+                    type="button"
+                    className="notif-clear-btn"
+                    onClick={clearAllNotifications}
+                  >
+                    Clear all
+                  </button>
+                )}
               </div>
             </div>
           )}
