@@ -61,6 +61,28 @@ export const sendMessage = async (req, res, next) => {
       } catch (e) {}
     }
 
+    // Fetch saved learning roadmap to ground career planning and skill development
+    const roadmap = await prisma.learningRoadmap.findFirst({
+      where: { userId: req.user.id },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    let roadmapContext = null;
+    if (roadmap) {
+      try {
+        const p30 = typeof roadmap.plan30Day === 'string' ? JSON.parse(roadmap.plan30Day) : (roadmap.plan30Day || []);
+        const p60 = typeof roadmap.plan60Day === 'string' ? JSON.parse(roadmap.plan60Day) : (roadmap.plan60Day || []);
+        const p90 = typeof roadmap.plan90Day === 'string' ? JSON.parse(roadmap.plan90Day) : (roadmap.plan90Day || []);
+        const allTasks = [...p30, ...p60, ...p90];
+        roadmapContext = {
+          title: roadmap.title,
+          targetRole: roadmap.targetRole,
+          overallProgress: `${roadmap.overallProgress}%`,
+          nextUpcomingMilestones: allTasks.filter((t) => !t.completed).slice(0, 3).map((t) => `${t.week}: ${t.title} (${t.project || ''})`),
+        };
+      } catch (e) {}
+    }
+
     const resumeContext = {
       candidateName: resume?.candidateName || req.user.name,
       targetRole: resume?.targetRole || req.user.role,
@@ -68,6 +90,7 @@ export const sendMessage = async (req, res, next) => {
       jobMatchScore: rawJson.jobMatchScore || latestAnalysis?.overallScore || 80,
       missingKeywords: latestAnalysis?.missingKeywords || [],
       rawText: resume?.rawText || '',
+      savedRoadmap: roadmapContext,
     };
 
     // 2. Fetch recent conversation history

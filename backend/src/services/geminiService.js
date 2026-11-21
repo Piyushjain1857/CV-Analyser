@@ -432,20 +432,27 @@ export async function generateChatReply({ userMessage, history = [], resumeConte
       const jobMatchScore = resumeContext.jobMatchScore || 75;
       const missingKeywords = (resumeContext.missingKeywords || []).slice(0, 8).join(', ');
       const resumeSnippet = (resumeContext.rawText || '').substring(0, 3000);
+      const savedRoadmap = resumeContext.savedRoadmap ? JSON.stringify(resumeContext.savedRoadmap) : 'None saved yet';
 
-      const systemInstruction = `You are CV Insight AI Career Assistant, an expert technical recruiter and career mentor.
+      const systemInstruction = `You are CV Insight AI Career Assistant, a Principal Career Technology Architect and Technical Recruiter.
 The authenticated candidate is ${candidateName}, targeting the role of "${targetRole}".
-Their current estimated ATS Compatibility score is ${atsScore}/100 and their Job-Specific Match score is ${jobMatchScore}/100.
+Their estimated ATS Compatibility score is ${atsScore}/100 and Job-Specific Match score is ${jobMatchScore}/100.
 Missing critical competencies identified: [${missingKeywords}].
+Saved Learning Roadmap: ${savedRoadmap}
 Resume excerpt:
 "${resumeSnippet}"
 
+CORE CAPABILITIES:
+1. Career Planning: Advise on strategic promotions, target band criteria (Senior, Staff, Principal), and executive alignment.
+2. Project Improvement: Recommend concrete architectural enhancements, repo structures, and measurable production milestones.
+3. Skill Development: Ground learning topics in their saved 30-60-90 day roadmap and bridge identified technical gaps.
+4. Interview Preparation: Coach on technical architecture questions and STAR behavioral narratives (Situation, Task, Action, Result).
+
 SAFETY & QUALITY RULES:
-1. Ground your advice directly in the candidate's actual background and their target role.
+1. Ground your advice directly in the candidate's actual background, target role, and saved learning roadmap.
 2. Provide concrete, high-yield actionable advice. Use bullet points and bold headers when helpful.
 3. NEVER fabricate qualifications, degrees, or achievements that the candidate does not possess.
-4. If asked how to improve ATS score, emphasize: quantified Google XYZ accomplishment bullets, adding identified missing keywords, standard single-column formatting, and active verbs.
-5. If asked if they are suitable for a specific role, assess objectively based on their verified stack and highlight exact gaps they need to bridge.`;
+4. Avoid discriminatory or unsupported candidate suitability claims. Provide constructive skill-based guidance.`;
 
       const conversationPrompt = `User asks: "${sanitizedUserMessage}"
 
@@ -837,5 +844,501 @@ Respond with valid JSON:
   } catch (err) {
     console.warn('[Gemini optimizeResumeForJob error, using fallback]:', err.message);
     return localOptimizeResumeForJob({ resumeContent, jobDescription });
+  }
+}
+
+
+/**
+ * ============================================================================
+ * INTERVIEW PREPARATION & EVALUATION SERVICES (Prompt Requirements 4 & 5)
+ * ============================================================================
+ */
+
+export function localInterviewQuestions({ targetRole = 'Software Engineer', resumeContext = {} }) {
+  const role = targetRole || 'Software Engineer';
+  const skills = resumeContext.skills || ['React', 'Node.js', 'PostgreSQL', 'Cloud Infrastructure'];
+  const primarySkill = skills[0] || 'Modern Architecture';
+  const secondarySkill = skills[1] || 'Databases';
+
+  return [
+    {
+      id: 'q-tech-1',
+      questionType: 'technical',
+      question: `In your work with ${primarySkill}, how do you design systems to handle high concurrency while preventing bottlenecks and race conditions?`,
+      contextClue: `Evaluates production-grade ${primarySkill} architecture, thread/event safety, and scalable backend design.`,
+      recommendedStructure: 'Explain architecture pattern, synchronization/caching mechanism, and measurable load testing results.',
+    },
+    {
+      id: 'q-tech-2',
+      questionType: 'technical',
+      question: `Describe how you approach relational database optimization in ${secondarySkill}. What indexes, connection pooling, and partition strategies do you prioritize?`,
+      contextClue: 'Tests relational data modeling, query execution plan inspection (EXPLAIN ANALYZE), and read/write scaling.',
+      recommendedStructure: 'Identify specific latency profiling metrics, schema redesign or indexing tactic, and before-and-after throughput figures.',
+    },
+    {
+      id: 'q-behav-1',
+      questionType: 'behavioral',
+      question: `Tell me about a time when you strongly disagreed with a product or technical architecture decision. How did you advocate your perspective while maintaining engineering team cohesion?`,
+      contextClue: 'Assesses mature engineering leadership, data-driven advocacy, and constructive conflict resolution.',
+      recommendedStructure: 'STAR Framework: Situation (tradeoff conflict), Task (your responsibility), Action (benchmarking/spike demo), Result (team consensus and impact).',
+    },
+    {
+      id: 'q-behav-2',
+      questionType: 'behavioral',
+      question: 'Describe a high-stakes outage or production incident you diagnosed under pressure. What were the steps from containment to post-mortem prevention?',
+      contextClue: 'Evaluates incident response, observability tooling (telemetry/logs), root-cause analysis, and preventative blameless post-mortems.',
+      recommendedStructure: 'STAR Framework: Detail initial containment, systematic root cause identification, and long-term regression tests shipped.',
+    },
+    {
+      id: 'q-res-1',
+      questionType: 'resume-specific',
+      question: `On your resume, you highlighted measurable optimizations for ${role}. Walk through the architectural decisions behind that accomplishment and what you would improve today.`,
+      contextClue: 'Validates factual ownership of highlighted resume achievements and critical reflective engineering judgment.',
+      recommendedStructure: 'Highlight baseline problem, specific technical interventions you owned, and 1-2 architectural tradeoffs you learned.',
+    },
+  ];
+}
+
+export async function generateInterviewQuestionsWithGemini({ targetRole = 'Software Engineer', resumeContext = {} }) {
+  const modelName = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+    return localInterviewQuestions({ targetRole, resumeContext });
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  const systemInstruction = `You are an elite Engineering Director and Interview Preparation Strategist.
+Generate realistic, probing interview questions for a candidate targeting the specified role.
+Include 2 technical questions, 2 behavioral questions, and 1 resume-specific question grounded in their actual skills.
+Output strictly valid JSON.`;
+
+  const prompt = `Target Role: ${targetRole}
+Candidate Context: ${JSON.stringify(resumeContext)}
+
+Generate 5 interview questions in this exact JSON structure:
+{
+  "questions": [
+    {
+      "id": "q-1",
+      "questionType": "technical",
+      "question": "The question text",
+      "contextClue": "Why recruiters ask this and what signals they seek",
+      "recommendedStructure": "STAR or architectural answering advice"
+    }
+  ]
+}`;
+
+  try {
+    const aiCall = async () => {
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          systemInstruction,
+          responseMimeType: 'application/json',
+          temperature: 0.3,
+        },
+      });
+      return response.text;
+    };
+
+    const rawResponse = await executeWithRetry(aiCall, 2, 20000);
+    const parsed = JSON.parse(rawResponse);
+    if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
+      return parsed.questions;
+    }
+    return localInterviewQuestions({ targetRole, resumeContext });
+  } catch (err) {
+    console.warn('[Gemini generateInterviewQuestions error, using fallback]:', err.message);
+    return localInterviewQuestions({ targetRole, resumeContext });
+  }
+}
+
+export function localEvaluateInterviewAnswer({
+  question = '',
+  questionType = 'technical',
+  userAnswer = '',
+  targetRole = 'Software Engineer',
+}) {
+  const wordCount = (userAnswer || '').trim().split(/\s+/).filter(Boolean).length;
+  const hasNumbers = /\d+%?|\$\d+/.test(userAnswer);
+  const mentionsMetrics = /reduced|increased|improved|scaled|saved|latency|uptime|throughput/i.test(userAnswer);
+  const mentionsSTAR = /situation|task|action|result|when|because|then|resolved/i.test(userAnswer);
+
+  let relevanceScore = 75;
+  let clarityScore = 72;
+  let completenessScore = 70;
+
+  if (wordCount >= 60) {
+    relevanceScore += 10;
+    completenessScore += 12;
+  }
+  if (hasNumbers || mentionsMetrics) {
+    clarityScore += 12;
+    completenessScore += 8;
+  }
+  if (mentionsSTAR) {
+    clarityScore += 8;
+  }
+
+  relevanceScore = Math.min(95, Math.max(55, relevanceScore));
+  clarityScore = Math.min(96, Math.max(50, clarityScore));
+  completenessScore = Math.min(94, Math.max(50, completenessScore));
+  const overallScore = Math.round((relevanceScore * 0.4) + (clarityScore * 0.3) + (completenessScore * 0.3));
+
+  const starEvaluation = {
+    situation: wordCount > 20 ? 'Identified background context and technical challenge.' : 'Context could be set more crisply.',
+    task: 'Addressed engineering ownership and target requirements.',
+    action: mentionsMetrics ? 'Clear decisive actions demonstrated with technical specificity.' : 'Focus more on specific tools and implementation actions you personally drove.',
+    result: hasNumbers ? 'Quantified impact stated effectively with numerical proof points.' : 'Strengthen with measurable business results (e.g. latency, error rate, dollar savings).',
+  };
+
+  const feedback = `Your response demonstrates strong fundamental understanding of ${targetRole} challenges. You articulated the core problem effectively. To elevate this to an executive-tier interview standard, tighten the cause-and-effect narrative and lead with your key quantitative outcome before detailing the implementation architecture.`;
+
+  const suggestedImprovement = `Refined STAR Phrasing: "When faced with [specific high-concurrency bottleneck], I owned [architecture/schema design]. By deploying [tool/technology] and decoupling [system component], we achieved [quantified metric, e.g. 40% latency reduction] and ensured 99.99% system availability."`;
+
+  return {
+    relevanceScore,
+    clarityScore,
+    completenessScore,
+    overallScore,
+    starEvaluation,
+    feedback,
+    suggestedImprovement,
+    disclaimer: 'AI-generated interview guidance for preparation purposes only; not a hiring decision or employment guarantee.',
+  };
+}
+
+export async function evaluateInterviewAnswerWithGemini({
+  question = '',
+  questionType = 'technical',
+  userAnswer = '',
+  targetRole = 'Software Engineer',
+}) {
+  const modelName = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+    return localEvaluateInterviewAnswer({ question, questionType, userAnswer, targetRole });
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  const systemInstruction = `You are a Principal Engineering Bar Raiser and Interview Coach.
+Evaluate candidate interview responses with constructive, rigorous, and supportive feedback.
+Rate Relevance (0-100), Clarity (0-100), and Completeness (0-100).
+Provide STAR framework assessment (Situation, Task, Action, Result).
+Give actionable feedback and an improved example response.
+MANDATORY: Always clearly label evaluation as AI-generated guidance, not a hiring decision.
+Output strictly valid JSON.`;
+
+  const prompt = `Target Role: ${targetRole}
+Question Type: ${questionType}
+Question: ${question}
+
+Candidate's Answer:
+<candidate_answer>
+${userAnswer}
+</candidate_answer>
+
+Respond with JSON:
+{
+  "relevanceScore": 85,
+  "clarityScore": 80,
+  "completenessScore": 82,
+  "overallScore": 83,
+  "starEvaluation": {
+    "situation": "Assessment of situation clarity",
+    "task": "Assessment of task ownership",
+    "action": "Assessment of specific technical actions",
+    "result": "Assessment of quantified business outcome"
+  },
+  "feedback": "Constructive evaluation highlighting strengths and gaps",
+  "suggestedImprovement": "Example of how candidate could elevate this answer",
+  "disclaimer": "AI-generated interview guidance for preparation purposes only; not a hiring decision or employment guarantee."
+}`;
+
+  try {
+    const aiCall = async () => {
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          systemInstruction,
+          responseMimeType: 'application/json',
+          temperature: 0.2,
+        },
+      });
+      return response.text;
+    };
+
+    const rawResponse = await executeWithRetry(aiCall, 2, 25000);
+    const parsed = JSON.parse(rawResponse);
+
+    return {
+      relevanceScore: typeof parsed.relevanceScore === 'number' ? parsed.relevanceScore : 80,
+      clarityScore: typeof parsed.clarityScore === 'number' ? parsed.clarityScore : 78,
+      completenessScore: typeof parsed.completenessScore === 'number' ? parsed.completenessScore : 76,
+      overallScore: typeof parsed.overallScore === 'number' ? parsed.overallScore : 80,
+      starEvaluation: parsed.starEvaluation || {
+        situation: 'Context evaluated',
+        task: 'Ownership verified',
+        action: 'Actions inspected',
+        result: 'Results analyzed',
+      },
+      feedback: parsed.feedback || 'Good articulation of engineering concepts.',
+      suggestedImprovement: parsed.suggestedImprovement || 'Quantify your measurable outcomes.',
+      disclaimer: 'AI-generated interview guidance for preparation purposes only; not a hiring decision or employment guarantee.',
+    };
+  } catch (err) {
+    console.warn('[Gemini evaluateInterviewAnswer error, using fallback]:', err.message);
+    return localEvaluateInterviewAnswer({ question, questionType, userAnswer, targetRole });
+  }
+}
+
+/**
+ * ============================================================================
+ * PERSONALIZED LEARNING ROADMAP SERVICES (Prompt Requirement 3)
+ * ============================================================================
+ */
+
+export function localPersonalizedRoadmap({ targetRole = 'Staff Full-Stack Engineer', skillGaps = [], resumeContext = {} }) {
+  const role = targetRole || 'Staff Software Engineer';
+  const gaps = Array.isArray(skillGaps) && skillGaps.length > 0 ? skillGaps : ['Distributed Streaming (Kafka)', 'PostgreSQL Partitioning', 'System Design'];
+
+  const plan30Day = [
+    {
+      id: 'task-30-1',
+      week: 'Week 1',
+      title: 'ATS Hygiene & Foundation Assessment',
+      objective: 'Align resume keywords and formatting with enterprise applicant tracking systems.',
+      project: 'Single-column ATS resume audit across Workday and Greenhouse parsers.',
+      milestone: 'Achieve 88+ ATS baseline score with zero unparsed sections.',
+      topics: ['ATS Parsing Heuristics', 'Google XYZ Accomplishment Framing'],
+      completed: true,
+    },
+    {
+      id: 'task-30-2',
+      week: 'Week 2',
+      title: `Core Skill Reinforcement: ${gaps[0] || 'Distributed Systems'}`,
+      objective: `Deepen verified production competence in ${gaps[0] || 'core engineering competencies'}.`,
+      project: 'Build standalone microservice prototype demonstrating fault-tolerant architecture.',
+      milestone: 'Ship reproducible GitHub repository with automated test suite and Dockerfile.',
+      topics: [gaps[0] || 'Core Architecture', 'Containerization & CI/CD'],
+      completed: false,
+    },
+    {
+      id: 'task-30-3',
+      week: 'Week 3',
+      title: 'Database & Concurrency Profiling',
+      objective: 'Master query optimization, connection pooling, and sub-200ms latency execution.',
+      project: 'Implement indexing and query benchmarking against 100,000+ relational records.',
+      milestone: 'Document 50%+ query latency improvement in technical post-mortem.',
+      topics: ['PostgreSQL MVCC & Query Plans', 'Redis Caching Strategies'],
+      completed: false,
+    },
+    {
+      id: 'task-30-4',
+      week: 'Week 4',
+      title: 'First Month Synthesis & Review',
+      objective: 'Re-match resume against 3 live target job postings and measure delta.',
+      project: 'Incorporate new project bullet points and quantifiable metrics into CV.',
+      milestone: 'Targeted match score increase by at least +10 points.',
+      topics: ['Resume Keyword Coverage', 'Portfolio Presentation'],
+      completed: false,
+    },
+  ];
+
+  const plan60Day = [
+    {
+      id: 'task-60-1',
+      week: 'Week 5',
+      title: `Advanced Architecture: ${gaps[1] || 'Event-Driven Systems'}`,
+      objective: `Architect scalable pipelines addressing ${gaps[1] || 'advanced distributed infrastructure'}.`,
+      project: 'Design resilient asynchronous event pipeline with automated consumer backpressure.',
+      milestone: 'Demonstrate zero-message-loss processing under synthetic spike load.',
+      topics: [gaps[1] || 'Event Streaming', 'Distributed Consensus & Tracing'],
+      completed: false,
+    },
+    {
+      id: 'task-60-2',
+      week: 'Week 6',
+      title: 'Observability & Site Reliability Engineering',
+      objective: 'Instrument distributed tracing, structured logging, and health metrics.',
+      project: 'Add OpenTelemetry telemetry and automated health checks to active project.',
+      milestone: 'Configure actionable SLO/SLA dashboards with p95/p99 alerts.',
+      topics: ['OpenTelemetry', 'System Availability Metrics', 'Grafana/Prometheus'],
+      completed: false,
+    },
+    {
+      id: 'task-60-3',
+      week: 'Week 7',
+      title: 'Public Portfolio & Technical Proof Points',
+      objective: 'Establish external authority and verifiable candidate credibility.',
+      project: 'Publish in-depth technical case study detailing architectural tradeoffs.',
+      milestone: 'Receive code reviews from peer senior engineers or open-source contributors.',
+      topics: ['Technical Writing', 'Open Source Collaboration'],
+      completed: false,
+    },
+    {
+      id: 'task-60-4',
+      week: 'Week 8',
+      title: 'Second Month Milestone Evaluation',
+      objective: 'Complete full mock technical screen and evaluate code quality against staff rubric.',
+      project: 'Solve 3 complex system architecture scenarios under timed interview conditions.',
+      milestone: 'Attain 85%+ readiness score across technical dimensions.',
+      topics: ['Mock Architecture Screens', 'Staff Engineer Competencies'],
+      completed: false,
+    },
+  ];
+
+  const plan90Day = [
+    {
+      id: 'task-90-1',
+      week: 'Week 9',
+      title: 'STAR Behavioral Mastery & Leadership Stories',
+      objective: 'Formulate 10 compelling executive-level behavioral narratives.',
+      project: 'Draft STAR answers covering cross-functional conflict, ambiguity, and failure recovery.',
+      milestone: 'Complete interactive AI interview evaluations with >85 overall score.',
+      topics: ['Executive Storytelling', 'STAR Behavioral Methodology'],
+      completed: false,
+    },
+    {
+      id: 'task-90-2',
+      week: 'Week 10',
+      title: 'Enterprise System Design Deep Dives',
+      objective: 'Master large-scale distributed system design questions.',
+      project: 'Diagram end-to-end architectures for global caching, sharding, and fault isolation.',
+      milestone: 'Present 45-minute live architecture walkthrough smoothly with tradeoffs.',
+      topics: ['Distributed Caching', 'Database Sharding', 'CAP Theorem Applications'],
+      completed: false,
+    },
+    {
+      id: 'task-90-3',
+      week: 'Week 11',
+      title: 'Targeted Outreach & Referral Pipeline',
+      objective: 'Initiate warm strategic connections with engineering leaders and recruiters.',
+      project: 'Connect with 15 engineering directors and tailored hiring teams.',
+      milestone: 'Secure at least 3 direct first-round interview invitations.',
+      topics: ['Warm Networking Strategy', 'Tailored Cover Letters'],
+      completed: false,
+    },
+    {
+      id: 'task-90-4',
+      week: 'Week 12',
+      title: 'Offer Evaluation & Compensation Strategy',
+      objective: 'Benchmark market compensation for senior/staff engineering bands.',
+      project: 'Assemble quantitative market data packages to back up compensation negotiation.',
+      milestone: 'Finalize top-tier offer backed by verified skills and demonstrable portfolio.',
+      topics: ['Compensation Negotiation', 'Equity/RSU Valuation'],
+      completed: false,
+    },
+  ];
+
+  return {
+    targetRole: role,
+    title: `30-60-90 Day Career Acceleration Roadmap: ${role}`,
+    plan30Day,
+    plan60Day,
+    plan90Day,
+    overallProgress: 8, // 1 of 12 tasks completed initially
+  };
+}
+
+export async function generatePersonalizedRoadmapWithGemini({
+  targetRole = 'Staff Full-Stack Engineer',
+  skillGaps = [],
+  resumeContext = {},
+}) {
+  const modelName = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
+    return localPersonalizedRoadmap({ targetRole, skillGaps, resumeContext });
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  const systemInstruction = `You are a Principal Engineering Career Strategist.
+Generate a realistic, high-impact 30-day, 60-day, and 90-day learning roadmap tailored to the candidate's target role and identified skill gaps.
+Each phase must contain exactly 4 structured weekly tasks with objective, practical project, measurable milestone, and recommended topics.
+Output strictly valid JSON.`;
+
+  const prompt = `Target Role: ${targetRole}
+Identified Skill Gaps: ${JSON.stringify(skillGaps)}
+Candidate Context: ${JSON.stringify(resumeContext)}
+
+Generate 30-60-90 Day Learning Roadmap:
+{
+  "targetRole": "${targetRole}",
+  "title": "30-60-90 Day Career Acceleration Roadmap",
+  "plan30Day": [
+    {
+      "id": "task-30-1",
+      "week": "Week 1",
+      "title": "Task title",
+      "objective": "Objective description",
+      "project": "Practical hands-on project",
+      "milestone": "Measurable verifiable milestone",
+      "topics": ["Topic 1", "Topic 2"],
+      "completed": false
+    }
+  ],
+  "plan60Day": [
+    {
+      "id": "task-60-1",
+      "week": "Week 5",
+      "title": "Task title",
+      "objective": "Objective description",
+      "project": "Practical hands-on project",
+      "milestone": "Measurable verifiable milestone",
+      "topics": ["Topic 1", "Topic 2"],
+      "completed": false
+    }
+  ],
+  "plan90Day": [
+    {
+      "id": "task-90-1",
+      "week": "Week 9",
+      "title": "Task title",
+      "objective": "Objective description",
+      "project": "Practical hands-on project",
+      "milestone": "Measurable verifiable milestone",
+      "topics": ["Topic 1", "Topic 2"],
+      "completed": false
+    }
+  ]
+}`;
+
+  try {
+    const aiCall = async () => {
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          systemInstruction,
+          responseMimeType: 'application/json',
+          temperature: 0.3,
+        },
+      });
+      return response.text;
+    };
+
+    const rawResponse = await executeWithRetry(aiCall, 2, 25000);
+    const parsed = JSON.parse(rawResponse);
+
+    if (Array.isArray(parsed.plan30Day) && Array.isArray(parsed.plan60Day) && Array.isArray(parsed.plan90Day)) {
+      return {
+        targetRole,
+        title: parsed.title || `30-60-90 Day Career Acceleration Roadmap: ${targetRole}`,
+        plan30Day: parsed.plan30Day,
+        plan60Day: parsed.plan60Day,
+        plan90Day: parsed.plan90Day,
+        overallProgress: 0,
+      };
+    }
+    return localPersonalizedRoadmap({ targetRole, skillGaps, resumeContext });
+  } catch (err) {
+    console.warn('[Gemini generatePersonalizedRoadmap error, using fallback]:', err.message);
+    return localPersonalizedRoadmap({ targetRole, skillGaps, resumeContext });
   }
 }

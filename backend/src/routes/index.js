@@ -7,6 +7,9 @@ import profileRoutes from './profileRoutes.js';
 import statsRoutes from './statsRoutes.js';
 import chatRoutes from './chatRoutes.js';
 import builderRoutes from './builderRoutes.js';
+import roadmapRoutes from './roadmapRoutes.js';
+import interviewRoutes from './interviewRoutes.js';
+import analyticsRoutes from './analyticsRoutes.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -22,5 +25,8 @@ router.use('/profile', protect, profileRoutes);
 router.use('/stats', protect, statsRoutes);
 router.use('/chat', protect, chatRoutes);
 router.use('/builder', protect, builderRoutes);
+router.use('/roadmap', protect, roadmapRoutes);
+router.use('/interview', protect, interviewRoutes);
+router.use('/analytics', protect, analyticsRoutes);
 
 export default router;

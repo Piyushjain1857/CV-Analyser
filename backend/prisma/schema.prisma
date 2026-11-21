@@ -27,6 +27,8 @@ model User {
   analysisHistories AnalysisHistory[]
   chatMessages      ChatMessage[]
   builderResumes    BuilderResume[]
+  roadmaps          LearningRoadmap[]
+  interviewPractices InterviewPractice[]
 }
 
 model Resume {
@@ -165,4 +167,47 @@ model ResumeVersion {
   createdAt       DateTime      @default(now())
 
   @@index([builderResumeId, createdAt])
+}
+
+model LearningRoadmap {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId        String?
+  targetRole      String
+  title           String   @default("30-60-90 Day Career Acceleration Roadmap")
+  plan30Day       String   // JSON string of task array
+  plan60Day       String   // JSON string of task array
+  plan90Day       String   // JSON string of task array
+  overallProgress Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, createdAt])
+}
+
+model InterviewPractice {
+  id                   String   @id @default(uuid())
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId             String?
+  targetRole           String
+  questionType         String   // "technical" | "behavioral" | "resume-specific"
+  question             String
+  contextClue          String?
+  userAnswer           String?
+  relevanceScore       Int?
+  clarityScore         Int?
+  completenessScore    Int?
+  overallScore         Int?
+  starEvaluation       String?  // JSON string: { situation, task, action, result }
+  feedback             String?
+  suggestedImprovement String?
+  disclaimer           String   @default("AI-generated interview guidance for preparation purposes only; not a hiring decision or employment guarantee.")
+  status               String   @default("evaluated")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([userId, targetRole])
 }
