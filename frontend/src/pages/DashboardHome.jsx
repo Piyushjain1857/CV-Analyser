@@ -24,6 +24,7 @@ import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
 import ScoreGauge from '../components/common/ScoreGauge';
 import HealthBadge from '../components/common/HealthBadge';
+import AICareerChatbot from '../components/common/AICareerChatbot';
 import './DashboardHome.css';
 
 export function DashboardHome() {
@@ -127,15 +128,15 @@ export function DashboardHome() {
 
         <Card hover className="dash-stat-card">
           <div className="stat-card-top">
-            <span className="stat-label">Interviews Multiplier</span>
+            <span className="stat-label">Resume Quality Index</span>
             <div className="stat-icon-wrapper cyan">
-              <Target size={18} />
+              <Sparkles size={18} />
             </div>
           </div>
           <div className="stat-card-bottom">
-            <span className="stat-value">3.8x</span>
+            <span className="stat-value">{stats?.avgQualityScore || 91}%</span>
             <div className="stat-trend positive">
-              <span>94.8% passing index</span>
+              <span>GenAI Assessed</span>
             </div>
           </div>
         </Card>
@@ -343,6 +344,9 @@ export function DashboardHome() {
           </Card>
         </div>
       </div>
+
+      {/* Floating GenAI Career Assistant Chatbot */}
+      <AICareerChatbot initialOpen={false} />
     </div>
   );
 }
