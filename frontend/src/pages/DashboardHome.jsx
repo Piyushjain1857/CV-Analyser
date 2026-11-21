@@ -75,7 +75,10 @@ export function DashboardHome() {
     .filter(Boolean)
     .reverse();
 
-  const displayScores = recentScores.length > 0 ? recentScores : [74, 81, 88, 92];
+  const scoreDelta =
+    recentScores.length > 1
+      ? recentScores[recentScores.length - 1] - recentScores[0]
+      : 0;
 
   return (
     <div className="dashboard-home-root animate-fade-in">
@@ -87,10 +90,18 @@ export function DashboardHome() {
             <span>AI Resume Intelligence Active</span>
           </div>
           <h1 className="dash-heading">
-            Welcome back, <span className="gradient-text">{userProfile?.name || 'Engineer'}</span>
+            {resumes.length === 0 ? 'Welcome,' : 'Welcome back,'}{' '}
+            <span className="gradient-text">{userProfile?.name || 'Applicant'}</span>
           </h1>
           <p className="dash-subheading">
-            Calibrated for <strong>{userProfile?.role || 'Staff Full-Stack Engineer'}</strong> in {userProfile?.industry || 'Cloud Infrastructure & SaaS'}.
+            {resumes.length === 0 ? (
+              'Welcome to your AI Career Intelligence dashboard. Upload your first resume or build one with Gemini to unlock instant 10-dimension ATS audits and gap analysis.'
+            ) : (
+              <>
+                Calibrated for <strong>{userProfile?.role || 'Technical Professional'}</strong>
+                {userProfile?.industry ? ` in ${userProfile.industry}` : ''}.
+              </>
+            )}
           </p>
         </div>
 
@@ -122,10 +133,10 @@ export function DashboardHome() {
             </div>
           </div>
           <div className="stat-card-bottom">
-            <span className="stat-value">{resumes.length || 4}</span>
+            <span className="stat-value">{resumes.length}</span>
             <div className="stat-trend positive">
               <TrendingUp size={14} />
-              <span>Tenant-isolated records</span>
+              <span>{resumes.length === 0 ? 'No documents uploaded' : 'Tenant-isolated records'}</span>
             </div>
           </div>
         </Card>
@@ -138,10 +149,12 @@ export function DashboardHome() {
             </div>
           </div>
           <div className="stat-card-bottom">
-            <span className="stat-value">{stats?.avgAtsScore || 88}%</span>
+            <span className="stat-value">
+              {resumes.length > 0 && stats?.avgAtsScore ? `${stats.avgAtsScore}%` : '--'}
+            </span>
             <div className="stat-trend positive">
               <TrendingUp size={14} />
-              <span>5-Component Rubric</span>
+              <span>{resumes.length > 0 && stats?.avgAtsScore ? '5-Component Rubric' : 'No audits conducted yet'}</span>
             </div>
           </div>
         </Card>
@@ -154,9 +167,11 @@ export function DashboardHome() {
             </div>
           </div>
           <div className="stat-card-bottom">
-            <span className="stat-value">{stats?.avgQualityScore || 91}%</span>
+            <span className="stat-value">
+              {resumes.length > 0 && stats?.avgQualityScore ? `${stats.avgQualityScore}%` : '--'}
+            </span>
             <div className="stat-trend positive">
-              <span>Google Gemini 2.5 Assessed</span>
+              <span>{resumes.length > 0 && stats?.avgQualityScore ? 'Google Gemini 2.5 Assessed' : 'Awaiting first scan'}</span>
             </div>
           </div>
         </Card>
@@ -250,18 +265,41 @@ export function DashboardHome() {
               ) : resumes.length === 0 ? (
                 <div className="empty-state-box">
                   <div className="empty-icon-wrap">
-                    <FileText size={36} />
+                    <UploadCloud size={32} className="text-violet" />
                   </div>
-                  <h3>No resumes uploaded yet</h3>
-                  <p>Upload your first PDF or DOCX file to run our 10-dimension ATS audit.</p>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    icon={UploadCloud}
-                    onClick={() => navigate('/dashboard/upload')}
-                  >
-                    Upload First Resume
-                  </Button>
+                  <h3>Ready for your first ATS Intelligence audit?</h3>
+                  <p>
+                    Upload a PDF or DOCX resume to get an instant 10-dimension ATS breakdown, Gemini Google XYZ bullet rewrites, and skill gap discovery.
+                  </p>
+                  <div className="onboarding-perks-row">
+                    <span className="perk-pill">
+                      <CheckCircle2 size={13} className="text-emerald" /> 10-Dimension Scoring
+                    </span>
+                    <span className="perk-pill">
+                      <CheckCircle2 size={13} className="text-emerald" /> Google XYZ Rewrites
+                    </span>
+                    <span className="perk-pill">
+                      <CheckCircle2 size={13} className="text-emerald" /> Tenant-Isolated Encryption
+                    </span>
+                  </div>
+                  <div className="empty-actions-row">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      icon={UploadCloud}
+                      onClick={() => navigate('/dashboard/upload')}
+                    >
+                      Upload First Resume
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      icon={Sparkles}
+                      onClick={() => navigate('/dashboard/builder')}
+                    >
+                      Create with AI Builder
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <div className="recent-resumes-list">
@@ -318,27 +356,69 @@ export function DashboardHome() {
           <Card className="dash-trend-card">
             <CardHeader
               title="ATS Score Trajectory"
-              subtitle="Performance across recent scan iterations"
+              subtitle={
+                recentScores.length > 0
+                  ? 'Performance across recent scan iterations'
+                  : 'Iteration progression tracker'
+              }
             />
             <CardBody>
-              <div className="score-bars-container">
-                {displayScores.map((score, idx) => (
-                  <div key={idx} className="trend-bar-column">
-                    <span className="trend-bar-val">{score}%</span>
-                    <div className="trend-bar-track">
-                      <div
-                        className="trend-bar-fill"
-                        style={{ height: `${score}%` }}
-                      />
-                    </div>
-                    <span className="trend-bar-label">v{idx + 1}</span>
+              {recentScores.length === 0 ? (
+                <div className="trajectory-empty-state">
+                  <div className="trajectory-empty-icon-box">
+                    <TrendingUp size={24} className="text-violet" />
                   </div>
-                ))}
-              </div>
-              <div className="trend-summary-note">
-                <TrendingUp size={14} className="text-emerald" />
-                <span>+18% score progression after Google XYZ optimizations</span>
-              </div>
+                  <h4 className="trajectory-empty-title">No Trajectory Recorded Yet</h4>
+                  <p className="trajectory-empty-desc">
+                    Your ATS score progression across iterations will be tracked and charted here as you scan new versions.
+                  </p>
+                  <div className="trajectory-milestone-preview">
+                    <div className="milestone-step active">
+                      <span className="milestone-dot" />
+                      <span className="milestone-text">1. First Scan</span>
+                    </div>
+                    <div className="milestone-line" />
+                    <div className="milestone-step">
+                      <span className="milestone-dot" />
+                      <span className="milestone-text">2. Optimization</span>
+                    </div>
+                    <div className="milestone-line" />
+                    <div className="milestone-step">
+                      <span className="milestone-dot" />
+                      <span className="milestone-text">3. ATS Ready</span>
+                    </div>
+                  </div>
+                  <div className="trend-summary-note neutral">
+                    <Sparkles size={13} className="text-violet" />
+                    <span>Scores will populate after your first upload</span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="score-bars-container">
+                    {recentScores.map((score, idx) => (
+                      <div key={idx} className="trend-bar-column">
+                        <span className="trend-bar-val">{score}%</span>
+                        <div className="trend-bar-track">
+                          <div
+                            className="trend-bar-fill"
+                            style={{ height: `${score}%` }}
+                          />
+                        </div>
+                        <span className="trend-bar-label">v{idx + 1}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="trend-summary-note">
+                    <TrendingUp size={14} className="text-emerald" />
+                    <span>
+                      {recentScores.length > 1
+                        ? `${scoreDelta >= 0 ? `+${scoreDelta}%` : `${scoreDelta}%`} progression across iterations`
+                        : `Baseline scan recorded at ${recentScores[0]}% ATS`}
+                    </span>
+                  </div>
+                </>
+              )}
             </CardBody>
           </Card>
 
@@ -346,7 +426,7 @@ export function DashboardHome() {
           <Card className="dash-skills-card">
             <CardHeader
               title="High-Yield Recruiter Keywords"
-              subtitle="Frequently missing competencies in technical scans"
+              subtitle="Industry benchmark competencies for technical roles"
             />
             <CardBody>
               <div className="keyword-radar-tags">

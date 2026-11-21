@@ -7,10 +7,12 @@ import { useApp } from '../../context/AppContext';
 import './Sidebar.css';
 
 export function Sidebar({ collapsed, setCollapsed }) {
-  const { isMobileSidebarOpen, setIsMobileSidebarOpen, theme, toggleTheme } = useApp();
+  const { isMobileSidebarOpen, setIsMobileSidebarOpen, theme, toggleTheme, resumes, addToast } = useApp();
   const { user, logout } = useAuth();
-  const { addToast } = useApp();
   const navigate = useNavigate();
+
+  const hasResumes = Boolean(resumes && resumes.length > 0);
+  const targetScore = hasResumes ? (user?.targetScore || 90) : 0;
 
   // 8 Primary Navigation Items requested in Prompt 8
   const primaryNavItems = [
@@ -145,13 +147,18 @@ export function Sidebar({ collapsed, setCollapsed }) {
                 <span className="widget-title">Target ATS Index</span>
               </div>
               <span className="widget-meta-pill">
-                <span className="widget-score-num">{user?.targetScore || 90}</span>
+                <span className="widget-score-num">{hasResumes ? targetScore : '--'}</span>
                 <span className="widget-score-denom">/100</span>
-                <span className="widget-high">Ready</span>
+                <span className={`widget-high ${!hasResumes ? 'widget-uncalibrated' : ''}`}>
+                  {hasResumes ? 'Ready' : 'New'}
+                </span>
               </span>
             </div>
             <div className="widget-progress">
-              <div className="widget-bar" style={{ width: `${user?.targetScore || 90}%` }} />
+              <div
+                className="widget-bar"
+                style={{ width: `${hasResumes ? targetScore : 0}%` }}
+              />
             </div>
           </div>
         )}
@@ -174,7 +181,7 @@ export function Sidebar({ collapsed, setCollapsed }) {
                     {user?.name || 'Applicant'}
                   </span>
                   <span className="sidebar-user-role">
-                    {user?.role || 'Software Engineer'}
+                    {user?.role || 'Applicant'}
                   </span>
                 </div>
               )}

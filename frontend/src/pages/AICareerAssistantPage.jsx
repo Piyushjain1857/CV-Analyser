@@ -23,18 +23,9 @@ export function AICareerAssistantPage() {
   const { activeAnalysis, resumes } = useApp();
 
   const candidateName = activeAnalysis?.resume?.candidateName || user?.name || 'Applicant';
-  const targetRole = activeAnalysis?.resume?.targetRole || user?.role || 'Staff Full-Stack Engineer';
-  const atsScore = activeAnalysis?.overallScore || 88;
-  const skills = activeAnalysis?.skillsAndKeywords?.technicalSkills || [
-    'React.js',
-    'Node.js',
-    'PostgreSQL',
-    'TypeScript',
-    'Docker',
-    'AWS',
-    'Microservices',
-    'Vite',
-  ];
+  const targetRole = activeAnalysis?.resume?.targetRole || user?.role || 'Awaiting resume upload';
+  const atsScore = activeAnalysis?.overallScore || null;
+  const skills = activeAnalysis?.skillsAndKeywords?.technicalSkills || [];
 
   return (
     <div className="career-assistant-page-root animate-fade-in">
@@ -77,7 +68,9 @@ export function AICareerAssistantPage() {
                 </div>
                 <div className="context-meta-row">
                   <span className="meta-label">Calibrated ATS Score:</span>
-                  <span className="meta-val score-high">{atsScore}/100</span>
+                  <span className={`meta-val ${atsScore ? 'score-high' : 'text-muted'}`}>
+                    {atsScore ? `${atsScore}/100` : '--'}
+                  </span>
                 </div>
 
                 <div className="context-divider" />
@@ -85,11 +78,17 @@ export function AICareerAssistantPage() {
                 <div className="context-skills-wrap">
                   <span className="context-section-label">Verified Extracted Skills:</span>
                   <div className="context-skills-tags">
-                    {skills.slice(0, 10).map((skill, idx) => (
-                      <span key={idx} className="c-skill-tag">
-                        {skill}
+                    {skills.length > 0 ? (
+                      skills.slice(0, 10).map((skill, idx) => (
+                        <span key={idx} className="c-skill-tag">
+                          {skill}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-muted" style={{ fontSize: '0.75rem', fontStyle: 'italic' }}>
+                        Scan a resume to extract verified skills
                       </span>
-                    ))}
+                    )}
                   </div>
                 </div>
 

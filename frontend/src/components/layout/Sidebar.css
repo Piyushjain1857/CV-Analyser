@@ -243,6 +243,11 @@
   margin-left: 2px;
 }
 
+.widget-high.widget-uncalibrated {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
 .widget-progress {
   width: 100%;
   height: 4px;

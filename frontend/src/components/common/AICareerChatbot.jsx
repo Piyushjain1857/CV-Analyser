@@ -29,6 +29,114 @@ const SUGGESTED_PROMPTS = [
   'What technical interview questions should I expect?',
 ];
 
+function formatInline(text) {
+  if (!text) return '';
+  const parts = [];
+  const regex = /(\*\*[^*]+\*\*|`[^`]+`)/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+    const token = match[0];
+    if (token.startsWith('**') && token.endsWith('**')) {
+      parts.push(<strong key={match.index}>{token.slice(2, -2)}</strong>);
+    } else if (token.startsWith('`') && token.endsWith('`')) {
+      parts.push(<code key={match.index}>{token.slice(1, -1)}</code>);
+    }
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+
+  return parts;
+}
+
+function FormattedMessageContent({ content }) {
+  if (!content) return null;
+
+  const rawLines = content.replace(/\r\n/g, '\n').split('\n');
+  const blocks = [];
+  let currentList = null;
+
+  const flushList = () => {
+    if (currentList) {
+      blocks.push(currentList);
+      currentList = null;
+    }
+  };
+
+  for (let i = 0; i < rawLines.length; i++) {
+    const line = rawLines[i].trim();
+    if (!line) {
+      flushList();
+      continue;
+    }
+
+    const bulletMatch = line.match(/^[-*•]\s+(.*)$/);
+    if (bulletMatch) {
+      if (!currentList || currentList.type !== 'ul') {
+        flushList();
+        currentList = { type: 'ul', items: [] };
+      }
+      currentList.items.push(bulletMatch[1]);
+      continue;
+    }
+
+    const orderedMatch = line.match(/^(\d+)\.\s+(.*)$/);
+    if (orderedMatch) {
+      if (!currentList || currentList.type !== 'ol') {
+        flushList();
+        currentList = { type: 'ol', items: [] };
+      }
+      currentList.items.push(orderedMatch[2]);
+      continue;
+    }
+
+    flushList();
+    blocks.push({ type: 'p', text: line });
+  }
+  flushList();
+
+  return (
+    <div className="formatted-msg-blocks">
+      {blocks.map((block, idx) => {
+        if (block.type === 'ul') {
+          return (
+            <ul key={idx} className="msg-bullet-list">
+              {block.items.map((item, itemIdx) => (
+                <li key={itemIdx} className="msg-bullet-item">
+                  {formatInline(item)}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        if (block.type === 'ol') {
+          return (
+            <ol key={idx} className="msg-ordered-list">
+              {block.items.map((item, itemIdx) => (
+                <li key={itemIdx} className="msg-ordered-item">
+                  {formatInline(item)}
+                </li>
+              ))}
+            </ol>
+          );
+        }
+        return (
+          <p key={idx} className="msg-para">
+            {formatInline(block.text)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 export function AICareerChatbot({ resumeId, inline = false, initialOpen = false }) {
   const { user } = useAuth();
   const { activeAnalysis, addToast } = useApp();
@@ -155,12 +263,17 @@ export function AICareerChatbot({ resumeId, inline = false, initialOpen = false 
       <div className="career-chatbot-inline">
         <div className="chatbot-header inline-header">
           <div className="chatbot-header-title">
-            <Bot size={20} className="text-primary" />
+            <div className="chatbot-header-icon-box">
+              <Bot size={20} className="chatbot-bot-icon" />
+            </div>
             <div>
               <h3 className="chatbot-name">AI Career Assistant</h3>
-              <span className="chatbot-context-sub">
-                Grounded in: <strong>{activeAnalysis?.resume?.title || 'Your Active Resume'}</strong>
-              </span>
+              <div className="chatbot-context-sub">
+                <span>Grounded in: </span>
+                <strong className="chatbot-grounding-target">
+                  {activeAnalysis?.resume?.title || activeAnalysis?.resume?.targetRole || 'Your Active Resume'}
+                </strong>
+              </div>
             </div>
           </div>
 
@@ -170,6 +283,7 @@ export function AICareerChatbot({ resumeId, inline = false, initialOpen = false 
               className="chat-icon-btn"
               onClick={handleClearChat}
               title="Clear conversation history"
+              aria-label="Clear chat history"
             >
               <Trash2 size={16} />
             </button>
@@ -178,6 +292,7 @@ export function AICareerChatbot({ resumeId, inline = false, initialOpen = false 
               className="chat-icon-btn"
               onClick={loadHistory}
               title="Refresh conversation"
+              aria-label="Refresh conversation"
             >
               <RefreshCw size={16} />
             </button>
@@ -187,7 +302,7 @@ export function AICareerChatbot({ resumeId, inline = false, initialOpen = false 
         {/* Suggested Prompts */}
         <div className="chat-prompt-chips">
           <div className="prompt-chips-label">
-            <Lightbulb size={13} className="text-amber" />
+            <Lightbulb size={14} className="text-amber" />
             <span>Suggested Inquiries:</span>
           </div>
           <div className="chips-list">
@@ -229,9 +344,7 @@ export function AICareerChatbot({ resumeId, inline = false, initialOpen = false 
                     {msg.source && <span className="chat-source-tag">{msg.source}</span>}
                   </div>
                   <div className="chat-bubble-text markdown-render">
-                    {msg.content.split('\n\n').map((para, idx) => (
-                      <p key={idx}>{para}</p>
-                    ))}
+                    <FormattedMessageContent content={msg.content} />
                   </div>
                 </div>
               </div>
@@ -276,6 +389,7 @@ export function AICareerChatbot({ resumeId, inline = false, initialOpen = false 
             size="sm"
             icon={Send}
             disabled={!inputMessage.trim() || loading}
+            className="chat-send-submit-btn"
           >
             Send
           </Button>
@@ -305,7 +419,9 @@ export function AICareerChatbot({ resumeId, inline = false, initialOpen = false 
         <div className="chatbot-floating-window animate-scale-up">
           <div className="chatbot-header">
             <div className="chatbot-header-title">
-              <Bot size={18} className="text-primary" />
+              <div className="chatbot-header-icon-box small">
+                <Bot size={16} className="chatbot-bot-icon" />
+              </div>
               <div>
                 <h3 className="chatbot-name">AI Career Assistant</h3>
                 <span className="chatbot-context-sub">
@@ -358,9 +474,7 @@ export function AICareerChatbot({ resumeId, inline = false, initialOpen = false 
               >
                 <div className={`chat-bubble ${msg.role}`}>
                   <div className="chat-bubble-text">
-                    {msg.content.split('\n\n').map((p, idx) => (
-                      <p key={idx}>{p}</p>
-                    ))}
+                    <FormattedMessageContent content={msg.content} />
                   </div>
                 </div>
               </div>
