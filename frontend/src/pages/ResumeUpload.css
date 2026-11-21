@@ -445,7 +445,7 @@
 .rubric-widget-title {
   font-size: 0.725rem;
   font-weight: 700;
-  color: #c4b5fd;
+  color: var(--text-accent);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }

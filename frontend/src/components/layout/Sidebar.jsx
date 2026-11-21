@@ -1,24 +1,6 @@
 import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import {
-  LayoutDashboard,
-  UploadCloud,
-  Sparkles,
-  Target,
-  Cpu,
-  Compass,
-  History,
-  Settings,
-  FileCheck2,
-  GitCompare,
-  ChevronLeft,
-  ChevronRight,
-  Zap,
-  LogOut,
-  Sun,
-  Moon,
-  HelpCircle,
-  TrendingUp,
+import {LayoutDashboard,UploadCloud,Sparkles,Target,Cpu,Compass,History,Settings,FileCheck2,GitCompare,ChevronLeft,ChevronRight,Zap,LogOut,Sun,Moon,HelpCircle,TrendingUp,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -33,7 +15,7 @@ export function Sidebar({ collapsed, setCollapsed }) {
   // 8 Primary Navigation Items requested in Prompt 8
   const primaryNavItems = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-    { to: '/dashboard/upload', label: 'Analyze Resume', icon: UploadCloud, pill: 'AI Scan' },
+    { to: '/dashboard/upload', label: 'Analyze Resume', icon: UploadCloud},
     { to: '/dashboard/builder', label: 'AI Resume Builder', icon: Sparkles, pill: 'PRO' },
     { to: '/dashboard/job-match', label: 'Job Match', icon: Target },
     { to: '/dashboard/assistant', label: 'AI Career Assistant', icon: Cpu },

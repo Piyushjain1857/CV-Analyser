@@ -36,35 +36,37 @@ export function ScoreGauge({
   }
 
   return (
-    <div className="score-gauge-wrapper" style={{ width: size, height: size }}>
-      <svg className="score-gauge-svg" width={size} height={size}>
-        {/* Background Track */}
-        <circle
-          className="score-gauge-track"
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          strokeWidth={strokeWidth}
-        />
-        {/* Animated Fill Circle */}
-        <circle
-          className="score-gauge-fill"
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          strokeWidth={strokeWidth}
-          stroke={color}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-        />
-      </svg>
-      <div className="score-gauge-content">
-        <span className="score-gauge-number" style={{ color: '#ffffff' }}>
-          {clampedScore}
-        </span>
-        <span className="score-gauge-sublabel">/100</span>
-        {label && <span className="score-gauge-title">{label}</span>}
+    <div className="score-gauge-wrapper">
+      <div className="score-gauge-ring" style={{ width: size, height: size }}>
+        <svg className="score-gauge-svg" width={size} height={size}>
+          {/* Background Track */}
+          <circle
+            className="score-gauge-track"
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            strokeWidth={strokeWidth}
+          />
+          {/* Animated Fill Circle */}
+          <circle
+            className="score-gauge-fill"
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            strokeWidth={strokeWidth}
+            stroke={color}
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+          />
+        </svg>
+        <div className="score-gauge-content">
+          <span className="score-gauge-number">
+            {clampedScore}
+          </span>
+          <span className="score-gauge-sublabel">/100</span>
+          {label && <span className="score-gauge-title">{label}</span>}
+        </div>
       </div>
       {showRating && (
         <div className="score-gauge-badge" style={{ color: gradeColor, borderColor: gradeColor }}>

@@ -100,6 +100,28 @@
   --radius-2xl: 24px;
   --radius-full: 9999px;
 
+  /* 4px-Based Spacing Scale (Prompt 10) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Standard Layout Paddings */
+  --page-padding-desktop: 32px;
+  --page-padding-tablet: 24px;
+  --page-padding-mobile: 16px;
+  --card-padding-default: 24px;
+  --card-padding-compact: 16px;
+  --card-padding-spacious: 32px;
+  --gap-grid-default: 20px;
+  --gap-grid-spacious: 28px;
+
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);

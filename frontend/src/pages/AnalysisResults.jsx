@@ -755,20 +755,27 @@ export function AnalysisResults() {
         </Card>
       </div>
 
-      {/* Transparent Disclaimer Callout (Prompt Rule 3) */}
+      {/* Transparent Disclaimer & Collapsible Methodology Callout */}
       <div className="results-disclaimer-banner">
         <Scale size={18} className="disclaimer-icon" />
         <div className="disclaimer-content">
           <p className="disclaimer-text">
             <strong>Estimated ATS Compatibility Index:</strong> This score is an estimated compatibility benchmark calculated using explainable rubric weights (Completeness 20%, Readability 20%, Section Organization 20%, Keyword Alignment 25%, Role Relevance 15%). It is an estimate and does not represent an actual employer ATS score or simulate any proprietary commercial ATS algorithm.
           </p>
-          <div className="rubric-weights-row">
-            <span className="rubric-tag">Keywords: {analysis.scoringCriteriaAndUncertainty.weights.keywordAlignment}</span>
-            <span className="rubric-tag">Completeness: {analysis.scoringCriteriaAndUncertainty.weights.completeness}</span>
-            <span className="rubric-tag">Readability: {analysis.scoringCriteriaAndUncertainty.weights.readability}</span>
-            <span className="rubric-tag">Section Hierarchy: {analysis.scoringCriteriaAndUncertainty.weights.sectionOrganization}</span>
-            <span className="rubric-tag">Role Relevance: {analysis.scoringCriteriaAndUncertainty.weights.roleRelevance}</span>
-          </div>
+          <details className="tech-details-collapsible">
+            <summary className="tech-details-summary">
+              View Scoring Criteria, Rubric Weights & Methodology
+            </summary>
+            <div className="rubric-weights-row" style={{ marginTop: '8px' }}>
+              <span className="rubric-tag">Keywords: {analysis.scoringCriteriaAndUncertainty.weights.keywordAlignment}</span>
+              <span className="rubric-tag">Completeness: {analysis.scoringCriteriaAndUncertainty.weights.completeness}</span>
+              <span className="rubric-tag">Readability: {analysis.scoringCriteriaAndUncertainty.weights.readability}</span>
+              <span className="rubric-tag">Section Hierarchy: {analysis.scoringCriteriaAndUncertainty.weights.sectionOrganization}</span>
+              <span className="rubric-tag">Role Relevance: {analysis.scoringCriteriaAndUncertainty.weights.roleRelevance}</span>
+              <span className="rubric-tag">Parser Model: {analysis.aiEngine}</span>
+              <span className="rubric-tag">Margin: {analysis.scoringCriteriaAndUncertainty.marginOfUncertainty}</span>
+            </div>
+          </details>
         </div>
       </div>
 

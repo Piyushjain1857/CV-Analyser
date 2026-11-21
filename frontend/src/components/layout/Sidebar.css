@@ -4,7 +4,7 @@
    ========================================================================== */
 
 .sidebar-root {
-  width: 250px;
+  width: 260px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-subtle);
   display: flex;
@@ -87,10 +87,10 @@
 }
 
 .sidebar-nav {
-  padding: 14px 10px;
+  padding: 16px 12px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   flex: 1;
   overflow-y: auto;
 }
@@ -109,6 +109,7 @@
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
+  min-height: 44px;
   border-radius: var(--radius-md);
   color: var(--text-secondary);
   font-size: 0.875rem;
@@ -218,8 +219,11 @@
 
 /* Footer / User Card */
 .sidebar-footer {
-  padding: 12px 10px;
+  padding: 14px 12px;
   border-top: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .sidebar-footer-row {
